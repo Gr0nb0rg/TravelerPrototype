@@ -43,7 +43,14 @@ public class ControllerPlayer : MonoBehaviour
 
     void HorizontalUpdate()
     {
-        m_Rigidbody.velocity = new Vector3(Input.GetAxisRaw("Horizontal") * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+        //Get forward rotation
+        Vector3 forward = Camera.main.transform.forward;
+        forward.y = 0;
+        Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
+
+        //Set velocity relative to rotation
+        if (m_IsOnGround)
+            m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
     }
 
     void JumpUpdate()
