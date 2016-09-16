@@ -139,4 +139,9 @@ public class ControllerPlayer : MonoBehaviour
     {
         return m_State;
     }
+
+    public Vector3 GetVelocity()
+    {
+        return m_Rigidbody.velocity;
+    }
 }
