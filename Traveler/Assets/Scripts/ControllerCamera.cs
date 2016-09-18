@@ -1,17 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ControllerCamera : MonoBehaviour
 {
+    public enum Mode
+    {
+        FollowPlayer,
+        LookAt,
+        Static
+    }
+
     //Public vars
     public LayerMask m_ZoomMask;
+    public Mode m_Mode = Mode.FollowPlayer;
+    public CursorLockMode m_CursorMode = CursorLockMode.Locked;
     public Vector3 m_Offset;
     public Vector2 m_Sensitivity = new Vector2(5, 5);
     public bool m_InvertY = false;
     public float m_ClampY = 80;
     public float m_PlayerDistance = 2.0f;
 
-    //Player vars
+    public Transform[] m_LookAtTransforms;
+
+    //Component vars
     ControllerPlayer m_Player;
 
     //Rotation vars
@@ -24,19 +36,61 @@ public class ControllerCamera : MonoBehaviour
     Vector3 m_DesiredPosition;
     Vector3 m_StartOffset;
 
+    //Look vars
+    int m_CurrentLookAt = 0;
+
+    //Text vars
+    Text m_Text;
+
 	void Start ()
     {
         m_MaxZ = m_Offset.z;
         m_StartOffset = m_Offset;
         m_Player = GameObject.Find("Player").GetComponent<ControllerPlayer>();
+        m_Text = GameObject.Find("CameraInfo2").GetComponent<Text>();
+
+        //Find all current lookat transforms
+        var transforms = GameObject.FindGameObjectsWithTag("LookAtTransform");
+        if (transforms.Length > 0)
+        {
+            m_LookAtTransforms = new Transform[transforms.Length];
+            for (int i = 0; i < transforms.Length; i++)
+            {
+                m_LookAtTransforms[i] = transforms[i].transform;
+            }
+
+            //Sort transforms
+            for (int write = 0; write < transforms.Length; write++)
+            {
+                for (int sort = 0; sort < transforms.Length - 1; sort++)
+                {
+                    if (m_LookAtTransforms[sort].GetComponent<LookAtTransform>().m_ID > m_LookAtTransforms[sort + 1].GetComponent<LookAtTransform>().m_ID)
+                    {
+                        Transform temp = m_LookAtTransforms[sort + 1];
+                        m_LookAtTransforms[sort + 1] = m_LookAtTransforms[sort];
+                        m_LookAtTransforms[sort] = temp;
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Couldn't find any lookat transforms!");
+        }
 	}
 	
 	void Update ()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = m_CursorMode;
+        TextUpdate();
 	}
 
     void LateUpdate()
+    {
+        ModeUpdate();
+    }
+
+    void ModeUpdate()
     {
         //Get input values
         if (m_InvertY)
@@ -55,9 +109,53 @@ public class ControllerCamera : MonoBehaviour
         //Get player rotation and set camera rotation/position relative to Y input and player rotation
         float desired = m_Player.transform.eulerAngles.y;
         Quaternion rot = Quaternion.Euler(m_AbsoluteY, desired, 0);
-        transform.position = m_Player.transform.position - (rot * m_Offset);
-        m_DesiredPosition = m_Player.transform.position - (rot * m_StartOffset);
-        transform.LookAt(m_Player.transform);
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SetMode(Mode.FollowPlayer);
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            SetMode(Mode.LookAt);
+        }
+        else if (Input.GetKeyDown(KeyCode.Y))
+        {
+            SetMode(Mode.Static);
+        }
+
+        switch (m_Mode)
+        {
+            case Mode.FollowPlayer:
+                transform.position = m_Player.transform.position - (rot * m_Offset);
+                m_DesiredPosition = m_Player.transform.position - (rot * m_StartOffset);
+                transform.LookAt(m_Player.transform);
+                break;
+
+            case Mode.LookAt:
+                if (Input.GetKeyDown(KeyCode.Tab))
+                    m_CurrentLookAt++;
+                if (m_CurrentLookAt > m_LookAtTransforms.Length - 1)
+                    m_CurrentLookAt = 0;
+
+                transform.position = m_Player.transform.position - (rot * m_Offset);
+                m_DesiredPosition = m_Player.transform.position - (rot * m_StartOffset);
+                transform.LookAt(m_LookAtTransforms[m_CurrentLookAt]);
+
+                break;
+
+            case Mode.Static:
+                if (Input.GetKeyDown(KeyCode.Tab))
+                    m_CurrentLookAt++;
+                if (m_CurrentLookAt > m_LookAtTransforms.Length - 1)
+                    m_CurrentLookAt = 0;
+
+                //m_DesiredPosition = Vector3.Lerp(m_DesiredPosition, m_LookAtTransforms[m_CurrentLookAt].position, 0.5f * Time.deltaTime);
+                //transform.position = Vector3.Lerp(transform.position, m_LookAtTransforms[m_CurrentLookAt].position, 0.5f * Time.deltaTime);
+                m_DesiredPosition = m_LookAtTransforms[m_CurrentLookAt].position;
+                transform.position = m_LookAtTransforms[m_CurrentLookAt].position;
+                transform.LookAt(m_Player.transform);
+                break;
+        }
 
         //Raycast from player to camera, set camera to hit point if raycast hits something
         Debug.DrawRay(m_Player.transform.position, m_DesiredPosition - m_Player.transform.position, Color.green);
@@ -71,6 +169,11 @@ public class ControllerCamera : MonoBehaviour
             //m_Offset.z = Mathf.Lerp(m_Offset.z, m_MaxZ, 0.01f);
             m_Offset = Vector3.Lerp(m_Offset, m_StartOffset, 0.01f);
         }
+    }
+
+    void TextUpdate()
+    {
+        m_Text.text = "Current mode: " + m_Mode.ToString() + "\nCurrent lookat index: " + m_CurrentLookAt;
     }
 
     bool IsColliding()
@@ -121,5 +224,15 @@ public class ControllerCamera : MonoBehaviour
         }
 
         return false;
+    }
+
+    void SetMode(Mode newMode)
+    {
+        m_Mode = newMode;
+    }
+
+    public Mode GetMode()
+    {
+        return m_Mode;
     }
 }
