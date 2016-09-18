@@ -49,7 +49,6 @@ public class ControllerPlayer : MonoBehaviour
         //Get forward rotation
         Vector3 forward = Camera.main.transform.forward;
         forward.y = 0;
-        Debug.DrawRay(Camera.main.transform.position, forward, Color.red);
         Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
 
         //Set velocity relative to rotation
@@ -71,6 +70,7 @@ public class ControllerPlayer : MonoBehaviour
                 SetState(MovementState.Moving);
             else
                 SetState(MovementState.Idle);
+
             m_IsOnGround = true;
             SetGravity(false);
         }

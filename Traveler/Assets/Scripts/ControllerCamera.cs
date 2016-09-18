@@ -35,6 +35,7 @@ public class ControllerCamera : MonoBehaviour
     RaycastHit hit;
     Vector3 m_DesiredPosition;
     Vector3 m_StartOffset;
+    Vector3 m_Target;
 
     //Look vars
     int m_CurrentLookAt = 0;
@@ -110,24 +111,25 @@ public class ControllerCamera : MonoBehaviour
         float desired = m_Player.transform.eulerAngles.y;
         Quaternion rot = Quaternion.Euler(m_AbsoluteY, desired, 0);
 
+        //Change camera modes
         if (Input.GetKeyDown(KeyCode.R))
-        {
             SetMode(Mode.FollowPlayer);
-        }
-        else if (Input.GetKeyDown(KeyCode.T))
-        {
+        else if (Input.GetKeyDown(KeyCode.T) && m_LookAtTransforms.Length > 0)
             SetMode(Mode.LookAt);
-        }
-        else if (Input.GetKeyDown(KeyCode.Y))
-        {
+        else if (Input.GetKeyDown(KeyCode.Y) && m_LookAtTransforms.Length > 0)
             SetMode(Mode.Static);
-        }
 
         switch (m_Mode)
         {
             case Mode.FollowPlayer:
                 transform.position = m_Player.transform.position - (rot * m_Offset);
                 m_DesiredPosition = m_Player.transform.position - (rot * m_StartOffset);
+                m_Target = m_Player.transform.position;
+
+                //Vector3 tar = m_Target - transform.position;
+                //Quaternion q = Quaternion.LookRotation(tar);
+                //transform.rotation = Quaternion.Lerp(transform.rotation, q, 0.9f * Time.deltaTime);
+
                 transform.LookAt(m_Player.transform);
                 break;
 
@@ -138,9 +140,14 @@ public class ControllerCamera : MonoBehaviour
                     m_CurrentLookAt = 0;
 
                 transform.position = m_Player.transform.position - (rot * m_Offset);
-                m_DesiredPosition = m_Player.transform.position - (rot * m_StartOffset);
-                transform.LookAt(m_LookAtTransforms[m_CurrentLookAt]);
+                m_DesiredPosition = m_Player.transform.position - (rot * m_Offset);
+                m_Target = m_LookAtTransforms[m_CurrentLookAt].position;
+                //m_DesiredPosition = Vector3.Lerp(m_DesiredPosition, m_Player.transform.position - (rot * m_Offset), 0.9f * Time.deltaTime);
+                //transform.position = Vector3.Lerp(transform.position, m_Player.transform.position - (rot * m_Offset), 0.9f * Time.deltaTime);
 
+                Vector3 tar1 = m_Target - transform.position;
+                Quaternion q1 = Quaternion.LookRotation(tar1);
+                transform.rotation = Quaternion.Lerp(transform.rotation, q1, 0.9f * Time.deltaTime);
                 break;
 
             case Mode.Static:
@@ -149,25 +156,26 @@ public class ControllerCamera : MonoBehaviour
                 if (m_CurrentLookAt > m_LookAtTransforms.Length - 1)
                     m_CurrentLookAt = 0;
 
-                //m_DesiredPosition = Vector3.Lerp(m_DesiredPosition, m_LookAtTransforms[m_CurrentLookAt].position, 0.5f * Time.deltaTime);
-                //transform.position = Vector3.Lerp(transform.position, m_LookAtTransforms[m_CurrentLookAt].position, 0.5f * Time.deltaTime);
-                m_DesiredPosition = m_LookAtTransforms[m_CurrentLookAt].position;
-                transform.position = m_LookAtTransforms[m_CurrentLookAt].position;
-                transform.LookAt(m_Player.transform);
+                //m_DesiredPosition = m_LookAtTransforms[m_CurrentLookAt].position;
+                //transform.position = m_LookAtTransforms[m_CurrentLookAt].position;
+                m_Target = m_Player.transform.position;
+                m_DesiredPosition = Vector3.Lerp(m_DesiredPosition, m_LookAtTransforms[m_CurrentLookAt].position, 0.9f * Time.deltaTime);
+                transform.position = Vector3.Lerp(transform.position, m_LookAtTransforms[m_CurrentLookAt].position, 0.9f * Time.deltaTime);
+
+                Vector3 tar2 = m_Target - transform.position;
+                Quaternion q2 = Quaternion.LookRotation(tar2);
+                transform.rotation = Quaternion.Lerp(transform.rotation, q2, 0.9f * Time.deltaTime);
+
+                //transform.LookAt(m_Player.transform);
                 break;
         }
 
         //Raycast from player to camera, set camera to hit point if raycast hits something
-        Debug.DrawRay(m_Player.transform.position, m_DesiredPosition - m_Player.transform.position, Color.green);
-        if (Physics.Raycast(m_Player.transform.position, m_DesiredPosition - m_Player.transform.position, out hit, (m_DesiredPosition - m_Player.transform.position).magnitude, m_ZoomMask))
+        Debug.DrawRay(m_Target, m_DesiredPosition - m_Target, Color.green);
+        if (Physics.Raycast(m_Target, m_DesiredPosition - m_Target, out hit, (m_DesiredPosition - m_Target).magnitude, m_ZoomMask))
         {
-            transform.position = (hit.point - m_Player.transform.position) * 0.8f + m_Player.transform.position; //- new Vector3(m_Offset.x, m_Offset.y, 0);
+            transform.position = (hit.point - m_Target) * 0.8f + m_Target; //- new Vector3(m_Offset.x, m_Offset.y, 0);
             Debug.DrawRay(hit.point, Vector3.up * 2, Color.red);
-        }
-        else
-        {
-            //m_Offset.z = Mathf.Lerp(m_Offset.z, m_MaxZ, 0.01f);
-            m_Offset = Vector3.Lerp(m_Offset, m_StartOffset, 0.01f);
         }
     }
 
