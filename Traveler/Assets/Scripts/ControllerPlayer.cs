@@ -19,6 +19,8 @@ public class ControllerPlayer : MonoBehaviour
     public MovementState m_State = MovementState.Idle;
     public float m_MovementSpeed = 15.0f;
     public float m_JumpForce = 200.0f;
+    public float m_MaxAngle = 45.0f;
+    public float m_SlopeSpeed = 25.0f;
 
     //Component vars
     Rigidbody m_Rigidbody;
@@ -29,6 +31,7 @@ public class ControllerPlayer : MonoBehaviour
 
     //Movement vars
     RaycastHit m_Hit;
+    Vector3 m_SlopeVelocity;
 
 	void Start()
     {
@@ -56,7 +59,14 @@ public class ControllerPlayer : MonoBehaviour
 
         //Set velocity relative to rotation
         if (m_IsOnGround)
-            m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+        {
+            //Set velocity to input values if not sliding, else set to slopevelocity
+            if (!GetState().Equals(MovementState.Sliding))
+                m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+
+            else
+                m_Rigidbody.velocity = m_SlopeVelocity * m_SlopeSpeed;
+        }
 
         /*float dist = 1.3f;
         Debug.DrawRay(transform.position, Vector3.down * dist, Color.green);
@@ -85,12 +95,18 @@ public class ControllerPlayer : MonoBehaviour
 
     void CheckState()
     {
+        //Checks what current movementstate the player should be in
         if (IsOnGround())
         {
-            if (m_Rigidbody.velocity.magnitude > 1)
-                SetState(MovementState.Moving);
+            if (!SlopeCheck(m_MaxAngle, 1.3f))
+            {
+                if (m_Rigidbody.velocity.magnitude > 1)
+                    SetState(MovementState.Moving);
+                else
+                    SetState(MovementState.Idle);
+            }
             else
-                SetState(MovementState.Idle);
+                SetState(MovementState.Sliding);
 
             m_IsOnGround = true;
             SetGravity(false);
@@ -149,10 +165,28 @@ public class ControllerPlayer : MonoBehaviour
                 //Vector3 pos = transform.position;
                 //pos.y += -m_Hit.normal.x * Mathf.Abs(m_Rigidbody.velocity.x) * Time.deltaTime * (m_Rigidbody.velocity.x - m_Hit.normal.x > 0 ? 1 : -1);
                 //transform.position = pos;
-
-                m_Rigidbody.MovePosition(new Vector3(m_Rigidbody.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, m_Rigidbody.position.z));
+                if (!GetState().Equals(MovementState.Sliding))
+                    m_Rigidbody.MovePosition(new Vector3(m_Rigidbody.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, m_Rigidbody.position.z));
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    bool SlopeCheck(float angle, float raydist)
+    {
+        Debug.DrawRay(transform.position, Vector3.down * raydist, Color.blue);
+        if (Physics.Raycast(new Ray(transform.position, Vector3.down), out m_Hit, raydist))
+        {
+            //Set slopevelocity to be relative to hit normal
+            m_SlopeVelocity = new Vector3(m_Hit.normal.x, -m_Hit.normal.y, m_Hit.normal.z);
+            Debug.DrawRay(transform.position, m_SlopeVelocity);
+
+            //Check if current angle between upwards vector and normal is equal to or greater than given value
+            float a = Vector3.Angle(Vector3.up, m_Hit.normal);
+            if (a >= angle)
+                return true;
         }
 
         return false;
