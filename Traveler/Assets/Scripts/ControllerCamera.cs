@@ -21,20 +21,19 @@ public class ControllerCamera : MonoBehaviour
     public float m_ClampY = 80;
     public float m_PlayerDistance = 2.0f;
 
-    public Transform[] m_LookAtTransforms;
+    Transform[] m_LookAtTransforms;
 
     //Component vars
     ControllerPlayer m_Player;
+    MeshRenderer m_PlayerRenderer;
 
     //Rotation vars
     float m_AbsoluteY;
     int m_InvertVal = 1;
 
     //Zoom vars
-    float m_MaxZ;
     RaycastHit hit;
     Vector3 m_DesiredPosition;
-    Vector3 m_StartOffset;
     Vector3 m_Target;
 
     //Look vars
@@ -45,9 +44,8 @@ public class ControllerCamera : MonoBehaviour
 
 	void Start ()
     {
-        m_MaxZ = m_Offset.z;
-        m_StartOffset = m_Offset;
         m_Player = GameObject.Find("Player").GetComponent<ControllerPlayer>();
+        m_PlayerRenderer = m_Player.GetComponentInChildren<MeshRenderer>();
         m_Text = GameObject.Find("CameraInfo2").GetComponent<Text>();
 
         //Find all current lookat transforms
@@ -119,16 +117,18 @@ public class ControllerCamera : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Y) && m_LookAtTransforms.Length > 0)
             SetMode(Mode.Static);
 
+        //Rotate camera and change position depending on mode
         switch (m_Mode)
         {
             case Mode.FollowPlayer:
                 transform.position = m_Player.transform.position - (rot * m_Offset);
-                m_DesiredPosition = m_Player.transform.position - (rot * m_StartOffset);
+                //transform.position = Vector3.Lerp(transform.position, m_Player.transform.position - (rot * m_Offset), 10.0f * Time.deltaTime);
+                m_DesiredPosition = m_Player.transform.position - (rot * m_Offset);
                 m_Target = m_Player.transform.position;
 
                 //Vector3 tar = m_Target - transform.position;
                 //Quaternion q = Quaternion.LookRotation(tar);
-                //transform.rotation = Quaternion.Lerp(transform.rotation, q, 0.9f * Time.deltaTime);
+                //transform.rotation = Quaternion.Lerp(transform.rotation, q, 10.0f * Time.deltaTime);
 
                 transform.LookAt(m_Player.transform);
                 break;
@@ -176,6 +176,20 @@ public class ControllerCamera : MonoBehaviour
         {
             transform.position = (hit.point - m_Target) * 0.8f + m_Target; //- new Vector3(m_Offset.x, m_Offset.y, 0);
             Debug.DrawRay(hit.point, Vector3.up * 2, Color.red);
+        }
+
+        //Change player material opacity if camera is too close
+        if (Vector3.Distance(transform.position, m_Player.transform.position) < m_PlayerDistance)
+        {
+            Color col = m_PlayerRenderer.material.color;
+            col.a = Mathf.Lerp(col.a, 0.3f, 4 * Time.deltaTime);
+            m_PlayerRenderer.material.color = col;
+        }
+        else
+        {
+            Color col = m_PlayerRenderer.material.color;
+            col.a = Mathf.Lerp(col.a, 1.0f, 4 * Time.deltaTime);
+            m_PlayerRenderer.material.color = col;
         }
     }
 

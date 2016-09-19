@@ -27,6 +27,9 @@ public class ControllerPlayer : MonoBehaviour
     //Jump vars
     bool m_IsOnGround = false;
 
+    //Movement vars
+    RaycastHit m_Hit;
+
 	void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -40,7 +43,7 @@ public class ControllerPlayer : MonoBehaviour
         HorizontalUpdate();
         JumpUpdate();
 
-        if (transform.position.y < -10)
+        if (transform.position.y < -20)
             transform.position = new Vector3(0, 10, 0);
 	}
 
@@ -54,6 +57,24 @@ public class ControllerPlayer : MonoBehaviour
         //Set velocity relative to rotation
         if (m_IsOnGround)
             m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+
+        /*float dist = 1.3f;
+        Debug.DrawRay(transform.position, Vector3.down * dist, Color.green);
+        if (Physics.Raycast(new Ray(transform.position, Vector3.down), out m_Hit, dist))
+        {
+            transform.position = m_Hit.point;
+            if (!m_IsOnGround)
+                transform.position = new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z);
+            m_Rigidbody.MovePosition(new Vector3(m_Rigidbody.transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, m_Rigidbody.transform.position.z));
+            transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z), 1.0f);
+        }
+        float yDisplacement = m_Rigidbody.velocity.y;
+        float xDisplacement = m_Rigidbody.velocity.x;
+        if (-Mathf.Abs(xDisplacement) < yDisplacement && yDisplacement < 0)
+        {
+            yDisplacement = -Mathf.Abs(xDisplacement) - 0.001f;
+        }
+        m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, yDisplacement, m_Rigidbody.velocity.z);*/
     }
 
     void JumpUpdate()
@@ -120,8 +141,16 @@ public class ControllerPlayer : MonoBehaviour
             }
             ray = new Ray(tempV + v, Vector3.down);
             Debug.DrawRay(tempV + v, Vector3.down * distance, Color.red);
-            if (Physics.Raycast(ray, distance))
+            if (Physics.Raycast(ray, out m_Hit, distance))
             {
+                //if (!m_IsOnGround)
+                //transform.position = new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z);
+                //transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z), 1.0f);
+                //Vector3 pos = transform.position;
+                //pos.y += -m_Hit.normal.x * Mathf.Abs(m_Rigidbody.velocity.x) * Time.deltaTime * (m_Rigidbody.velocity.x - m_Hit.normal.x > 0 ? 1 : -1);
+                //transform.position = pos;
+
+                m_Rigidbody.MovePosition(new Vector3(m_Rigidbody.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, m_Rigidbody.position.z));
                 return true;
             }
         }
