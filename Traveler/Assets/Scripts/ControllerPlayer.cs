@@ -25,6 +25,7 @@ public class ControllerPlayer : MonoBehaviour
     //Component vars
     Rigidbody m_Rigidbody;
     Collider m_Collider;
+    ControllerCamera m_Camera;
 
     //Jump vars
     bool m_IsOnGround = false;
@@ -37,6 +38,7 @@ public class ControllerPlayer : MonoBehaviour
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Collider = GetComponentInChildren<CapsuleCollider>();
+        m_Camera = Camera.main.GetComponent<ControllerCamera>();
 	}
 	
 	void Update()
@@ -46,7 +48,7 @@ public class ControllerPlayer : MonoBehaviour
         HorizontalUpdate();
         JumpUpdate();
 
-        if (transform.position.y < -20)
+        if (transform.position.y < -100)
             transform.position = new Vector3(0, 10, 0);
 	}
 
@@ -55,17 +57,44 @@ public class ControllerPlayer : MonoBehaviour
         //Get forward rotation
         Vector3 forward = Camera.main.transform.forward;
         forward.y = 0;
-        Quaternion rot = Quaternion.LookRotation(forward, Vector3.up);
+        Quaternion rot; //= Quaternion.LookRotation(forward, Vector3.up);
+
+        //Set rotation to camera look if mode is followplayer
+        if (m_Camera.GetMode().Equals(Mode.FollowPlayer))
+        {
+            if (m_Rigidbody.velocity.magnitude < 1)
+            {
+                //If player is still then the rotation should be static
+                Vector3 f = transform.forward;
+                f.y = 0;
+                rot = Quaternion.LookRotation(f, Vector3.up);
+            }
+            else
+            {
+                //If the player is moving the the rotation will be set to the cameras direction
+                Quaternion q = Camera.main.transform.rotation;
+                transform.rotation = Quaternion.Lerp(transform.rotation, new Quaternion(transform.rotation.x, q.y, transform.rotation.z, q.w), 10 * Time.deltaTime);
+
+                rot = Quaternion.LookRotation(forward, Vector3.up);
+            }
+        }
+        //Set rotation to X input if not in followplayer mode
+        else
+        {
+            transform.Rotate(0, m_Camera.GetInput().x, 0);
+            rot = Quaternion.LookRotation(forward, Vector3.up);
+        }
+
 
         //Set velocity relative to rotation
         if (m_IsOnGround)
         {
             //Set velocity to input values if not sliding, else set to slopevelocity
             if (!GetState().Equals(MovementState.Sliding))
-                m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+                m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
 
             else
-                m_Rigidbody.velocity = m_SlopeVelocity * m_SlopeSpeed;
+                m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + m_SlopeVelocity * m_SlopeSpeed, 3.0f * Time.deltaTime);
         }
 
         /*float dist = 1.3f;
