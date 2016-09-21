@@ -153,7 +153,8 @@ public class ControllerCamera : MonoBehaviour
                 //Quaternion q = Quaternion.LookRotation(tar);
                 //transform.rotation = Quaternion.Lerp(transform.rotation, q, 10.0f * Time.deltaTime);
 
-                transform.LookAt(m_Player.transform);
+                //Lookat player + offset (shoulder camera)
+                transform.LookAt(m_Player.transform.position + rot * new Vector3(m_Offset.x, m_Offset.y, 0));
                 break;
 
             case Mode.LookAt:
@@ -205,7 +206,7 @@ public class ControllerCamera : MonoBehaviour
             Debug.DrawRay(m_Hit.point, Vector3.up * 2, Color.red);
         }
         //else
-        //    b = false;
+           // b = false;
 
         //Change player material opacity if camera is too close
         if (Vector3.Distance(transform.position, m_Player.transform.position) < m_PlayerDistance)
