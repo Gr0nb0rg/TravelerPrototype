@@ -94,7 +94,7 @@ public class ControllerPlayer : MonoBehaviour
                 m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
 
             else
-                m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + m_SlopeVelocity * m_SlopeSpeed, 3.0f * Time.deltaTime);
+                m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + (m_SlopeVelocity * m_SlopeSpeed), 3.0f * Time.deltaTime);
         }
 
         /*float dist = 1.3f;
@@ -127,7 +127,7 @@ public class ControllerPlayer : MonoBehaviour
         //Checks what current movementstate the player should be in
         if (IsOnGround())
         {
-            if (!SlopeCheck(m_MaxAngle, 1.3f))
+            if (!SlopeCheck(m_MaxAngle, 1.5f))
             {
                 if (m_Rigidbody.velocity.magnitude > 1)
                     SetState(MovementState.Moving);

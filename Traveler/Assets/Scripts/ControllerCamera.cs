@@ -31,8 +31,6 @@ public class ControllerCamera : MonoBehaviour
     float m_AbsoluteY;
     float m_AbsoluteX;
     int m_InvertVal = 1;
-    Vector3 offsetX;
-    Vector3 offsetY;
 
     //Zoom vars
     RaycastHit m_Hit;
@@ -112,12 +110,17 @@ public class ControllerCamera : MonoBehaviour
         m_InvertVal = Mathf.Clamp(m_InvertVal, -1, 1);
         m_Inputs = new Vector2(Input.GetAxis("Mouse X") * m_Sensitivity.x, Input.GetAxis("Mouse Y") * m_InvertVal * m_Sensitivity.y);
 
+        var angle = Mathf.Asin(Vector3.Cross(transform.forward, m_Player.transform.forward).y) * Mathf.Rad2Deg;
+
         //Set absolute X
         m_AbsoluteX += m_Inputs.x;
         if (m_AbsoluteX > 360)
             m_AbsoluteX -= 360;
         else if (m_AbsoluteX < -360)
             m_AbsoluteX += 360;
+
+        //m_AbsoluteX = Mathf.Clamp(m_AbsoluteX, m_Player.transform.rotation.eulerAngles.y - 45, m_Player.transform.rotation.eulerAngles.y + 45);
+        //Debug.Log((m_Player.transform.rotation.eulerAngles.y - 45) + " " + (m_Player.transform.rotation.eulerAngles.y + 45));
 
         //Set absolute Y
         m_AbsoluteY += m_Inputs.y;
@@ -191,8 +194,6 @@ public class ControllerCamera : MonoBehaviour
         }
 
         //Raycast from player to camera, set camera to hit point if raycast hits something
-        Debug.DrawRay(-(rot * m_Offset), Vector3.up);
-
         Debug.DrawRay(m_Target, m_NonZoomPosition - m_Target, Color.green);
         if (Physics.Raycast(m_Target, m_NonZoomPosition - m_Target, out m_Hit, (m_NonZoomPosition - m_Target).magnitude, m_ZoomMask))
         {
