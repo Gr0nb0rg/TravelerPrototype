@@ -35,9 +35,12 @@ public class ControllerCamera : MonoBehaviour
     Vector3 offsetY;
 
     //Zoom vars
-    RaycastHit hit;
+    RaycastHit m_Hit;
     Vector3 m_DesiredPosition;
     Vector3 m_Target;
+    Vector3 m_StartOffset;
+    Vector3 m_NonZoomPosition;
+    //bool b = false;
 
     //Look vars
     int m_CurrentLookAt = 0;
@@ -53,6 +56,7 @@ public class ControllerCamera : MonoBehaviour
         m_Player = GameObject.Find("Player").GetComponent<ControllerPlayer>();
         m_PlayerRenderer = m_Player.GetComponentInChildren<MeshRenderer>();
         m_Text = GameObject.Find("CameraInfo2").GetComponent<Text>();
+        m_StartOffset = m_Offset;
 
         //Find all current lookat transforms
         var transforms = GameObject.FindGameObjectsWithTag("LookAtTransform");
@@ -122,6 +126,7 @@ public class ControllerCamera : MonoBehaviour
         //Get player rotation and set camera rotation/position relative to Y input and player rotation
         //float desired = m_Player.transform.eulerAngles.y;
         Quaternion rot = Quaternion.Euler(m_AbsoluteY, m_AbsoluteX, 0);
+        m_NonZoomPosition = m_Player.transform.position - (rot * m_StartOffset);
 
         //Change camera modes
         if (Input.GetKeyDown(KeyCode.R))
@@ -135,28 +140,17 @@ public class ControllerCamera : MonoBehaviour
         switch (m_Mode)
         {
             case Mode.FollowPlayer:
-                //Do different rotations depending on if player is moving or not
-                if (m_Player.GetVelocity().magnitude > 1)
-                {
-                    transform.position = m_Player.transform.position - (rot * m_Offset);
-                    //transform.position = Vector3.Lerp(transform.position, m_Player.transform.position - (rot * m_Offset), 10.0f * Time.deltaTime);
-                    m_DesiredPosition = m_Player.transform.position - (rot * m_Offset);
-                    m_Target = m_Player.transform.position;
+                //if (!b)
+                transform.position = m_Player.transform.position - (rot * m_Offset);
+                //transform.position = Vector3.Lerp(transform.position, m_Player.transform.position - (rot * m_Offset), 10.0f * Time.deltaTime);
+                m_DesiredPosition = m_Player.transform.position - (rot * m_Offset);
+                m_Target = m_Player.transform.position;
 
-                    //Vector3 tar = m_Target - transform.position;
-                    //Quaternion q = Quaternion.LookRotation(tar);
-                    //transform.rotation = Quaternion.Lerp(transform.rotation, q, 10.0f * Time.deltaTime);
+                //Vector3 tar = m_Target - transform.position;
+                //Quaternion q = Quaternion.LookRotation(tar);
+                //transform.rotation = Quaternion.Lerp(transform.rotation, q, 10.0f * Time.deltaTime);
 
-                    transform.LookAt(m_Player.transform);
-                }
-                else
-                {
-                    rot = Quaternion.Euler(m_AbsoluteY, m_AbsoluteX, 0);
-                    transform.position = m_Player.transform.position - (rot * m_Offset);
-                    m_DesiredPosition = m_Player.transform.position - (rot * m_Offset);
-                    m_Target = m_Player.transform.position;
-                    transform.LookAt(m_Player.transform);
-                }
+                transform.LookAt(m_Player.transform);
                 break;
 
             case Mode.LookAt:
@@ -197,12 +191,20 @@ public class ControllerCamera : MonoBehaviour
         }
 
         //Raycast from player to camera, set camera to hit point if raycast hits something
-        Debug.DrawRay(m_Target, m_DesiredPosition - m_Target, Color.green);
-        if (Physics.Raycast(m_Target, m_DesiredPosition - m_Target, out hit, (m_DesiredPosition - m_Target).magnitude, m_ZoomMask))
+        Debug.DrawRay(-(rot * m_Offset), Vector3.up);
+
+        Debug.DrawRay(m_Target, m_NonZoomPosition - m_Target, Color.green);
+        if (Physics.Raycast(m_Target, m_NonZoomPosition - m_Target, out m_Hit, (m_NonZoomPosition - m_Target).magnitude, m_ZoomMask))
         {
-            transform.position = (hit.point - m_Target) * 0.8f + m_Target; //- new Vector3(m_Offset.x, m_Offset.y, 0);
-            Debug.DrawRay(hit.point, Vector3.up * 2, Color.red);
+            transform.position = (m_Hit.point - m_Target) * 0.8f + m_Target;
+            //Vector3 v = (new Vector3(m_Hit.point.x, m_Hit.point.y, 0) - new Vector3(m_Target.x, m_Target.y, 0)) * 0.8f + new Vector3(m_Target.x, m_Target.y, 0);
+            //transform.position = new Vector3(v.x, v.y, Mathf.Lerp(transform.position.z, (m_Hit.point.z - m_Target.z) * 0.8f + m_Target.z, 4.0f * Time.deltaTime));
+            //transform.position = Vector3.Lerp(transform.position, (m_Hit.point - m_Target) * 0.8f + m_Target, 4.0f * Time.deltaTime);
+            //b = true;
+            Debug.DrawRay(m_Hit.point, Vector3.up * 2, Color.red);
         }
+        //else
+        //    b = false;
 
         //Change player material opacity if camera is too close
         if (Vector3.Distance(transform.position, m_Player.transform.position) < m_PlayerDistance)

@@ -3,11 +3,17 @@ using System.Collections;
 
 public class ControllerCheckpoint : MonoBehaviour
 {
+    //Public vars
     public int m_CurrentCheckpoint;
     public Transform[] m_Checkpoints;
 
+    //Component vars
+    ControllerPlayer m_Player;
+
 	void Start()
     {
+        m_Player = GetComponent<ControllerPlayer>();
+
         //Find checkpoints
         var checkpoints = GameObject.FindGameObjectsWithTag("Checkpoint");
         if (checkpoints.Length > 0)
@@ -42,8 +48,12 @@ public class ControllerCheckpoint : MonoBehaviour
 	
 	void Update()
     {
-	
-	}
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            m_Player.SetPosition(m_Checkpoints[m_CurrentCheckpoint].position);
+            m_Player.ResetValues();
+        }
+    }
 
     public void SetCurrent(int id)
     {

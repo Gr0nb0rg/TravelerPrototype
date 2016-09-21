@@ -62,7 +62,7 @@ public class ControllerPlayer : MonoBehaviour
         //Set rotation to camera look if mode is followplayer
         if (m_Camera.GetMode().Equals(Mode.FollowPlayer))
         {
-            if (m_Rigidbody.velocity.magnitude < 1)
+            if (!GetState().Equals(MovementState.Moving))
             {
                 //If player is still then the rotation should be static
                 Vector3 f = transform.forward;
@@ -226,18 +226,28 @@ public class ControllerPlayer : MonoBehaviour
         m_State = newState;
     }
 
-    void SetGravity(bool state)
-    {
-        m_Rigidbody.useGravity = state;
-    }
-
     public MovementState GetState()
     {
         return m_State;
     }
 
+    void SetGravity(bool state)
+    {
+        m_Rigidbody.useGravity = state;
+    }
+
     public Vector3 GetVelocity()
     {
         return m_Rigidbody.velocity;
+    }
+
+    public void SetPosition(Vector3 newPos)
+    {
+        transform.position = newPos;
+    }
+
+    public void ResetValues()
+    {
+        m_Rigidbody.velocity = Vector3.zero;
     }
 }
