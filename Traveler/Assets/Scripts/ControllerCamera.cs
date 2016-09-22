@@ -129,7 +129,6 @@ public class ControllerCamera : MonoBehaviour
         //Get player rotation and set camera rotation/position relative to Y input and player rotation
         //float desired = m_Player.transform.eulerAngles.y;
         Quaternion rot = Quaternion.Euler(m_AbsoluteY, m_AbsoluteX, 0);
-        m_NonZoomPosition = m_Player.transform.position - (rot * m_StartOffset);
 
         //Change camera modes
         if (Input.GetKeyDown(KeyCode.R))
@@ -144,6 +143,7 @@ public class ControllerCamera : MonoBehaviour
         {
             case Mode.FollowPlayer:
                 //if (!b)
+                m_NonZoomPosition = m_Player.transform.position - (rot * m_StartOffset);
                 transform.position = m_Player.transform.position - (rot * m_Offset);
                 //transform.position = Vector3.Lerp(transform.position, m_Player.transform.position - (rot * m_Offset), 10.0f * Time.deltaTime);
                 m_DesiredPosition = m_Player.transform.position - (rot * m_Offset);
@@ -163,6 +163,7 @@ public class ControllerCamera : MonoBehaviour
                 if (m_CurrentLookAt > m_LookAtTransforms.Length - 1)
                     m_CurrentLookAt = 0;
 
+                m_NonZoomPosition = m_Player.transform.position - (rot * m_StartOffset);
                 transform.position = m_Player.transform.position - (rot * m_Offset);
                 m_DesiredPosition = m_Player.transform.position - (rot * m_Offset);
                 m_Target = m_LookAtTransforms[m_CurrentLookAt].position;
@@ -182,6 +183,7 @@ public class ControllerCamera : MonoBehaviour
 
                 //m_DesiredPosition = m_LookAtTransforms[m_CurrentLookAt].position;
                 //transform.position = m_LookAtTransforms[m_CurrentLookAt].position;
+                m_NonZoomPosition = m_LookAtTransforms[m_CurrentLookAt].position;
                 m_Target = m_Player.transform.position;
                 m_DesiredPosition = Vector3.Lerp(m_DesiredPosition, m_LookAtTransforms[m_CurrentLookAt].position, 0.9f * Time.deltaTime);
                 transform.position = Vector3.Lerp(transform.position, m_LookAtTransforms[m_CurrentLookAt].position, 0.9f * Time.deltaTime);
