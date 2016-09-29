@@ -34,6 +34,9 @@ public class ControllerPlayer : MonoBehaviour
     RaycastHit m_Hit;
     Vector3 m_SlopeVelocity;
 
+    //Paused vars
+    bool m_IsPaused = false;
+
 	void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -42,14 +45,17 @@ public class ControllerPlayer : MonoBehaviour
 	}
 	
 	void Update()
-    {  
-        CheckState();
+    {
+        if (!m_IsPaused)
+        {
+            CheckState();
 
-        HorizontalUpdate();
-        JumpUpdate();
+            HorizontalUpdate();
+            JumpUpdate();
 
-        if (transform.position.y < -100)
-            transform.position = new Vector3(0, 10, 0);
+            if (transform.position.y < -100)
+                transform.position = new Vector3(0, 10, 0);
+        }  
 	}
 
     void HorizontalUpdate()
@@ -249,5 +255,15 @@ public class ControllerPlayer : MonoBehaviour
     public void ResetValues()
     {
         m_Rigidbody.velocity = Vector3.zero;
+    }
+
+    public void SetPaused(bool state)
+    {
+        m_IsPaused = state;
+    }
+
+    public bool GetIsPaused()
+    {
+        return m_IsPaused;
     }
 }
