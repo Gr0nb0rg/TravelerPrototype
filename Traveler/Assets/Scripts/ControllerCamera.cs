@@ -115,7 +115,7 @@ public class ControllerCamera : MonoBehaviour
         m_InvertVal = Mathf.Clamp(m_InvertVal, -1, 1);
         m_Inputs = new Vector2(Input.GetAxis("Mouse X") * m_Sensitivity.x, Input.GetAxis("Mouse Y") * m_InvertVal * m_Sensitivity.y);
 
-        var angle = Mathf.Asin(Vector3.Cross(transform.forward, m_Player.transform.forward).y) * Mathf.Rad2Deg;
+        //var angle = Mathf.Asin(Vector3.Cross(transform.forward, m_Player.transform.forward).y) * Mathf.Rad2Deg;
 
         //Set absolute X
         m_AbsoluteX += m_Inputs.x;

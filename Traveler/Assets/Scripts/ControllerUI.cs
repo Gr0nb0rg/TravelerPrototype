@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -7,10 +8,18 @@ public enum GameState
     Paused
 }
 
+public enum MenuState
+{
+    Main,
+    Options,
+    Instructions
+}
+
 public class ControllerUI : MonoBehaviour
 {
     //Public vars
-    public GameState m_State = GameState.InGame;
+    public GameState m_GameState = GameState.InGame;
+    public MenuState m_MenuState = MenuState.Main;
 
     //Pause vars
     bool m_IsPaused = false;
@@ -34,6 +43,8 @@ public class ControllerUI : MonoBehaviour
         m_CameraInfo = GameObject.Find("CameraInfo");
         m_PausedInfo = GameObject.Find("PausedInfo");
         m_PausedInfo.SetActive(false);
+
+        Time.timeScale = 1;
 	}
 	
 	void Update()
@@ -58,9 +69,15 @@ public class ControllerUI : MonoBehaviour
         m_IsPaused = !m_IsPaused;
 
         if (!GetIsPaused())
+        {
             Time.timeScale = 1;
+            SetGameState(GameState.InGame);
+        }
         else
+        {
             Time.timeScale = 0;
+            SetGameState(GameState.Paused);
+        }
 
         m_Player.SetPaused(m_IsPaused);
         m_Camera.SetPaused(m_IsPaused);
@@ -75,8 +92,46 @@ public class ControllerUI : MonoBehaviour
         return m_IsPaused;
     }
 
-    void SetState(GameState newState)
+    void SetGameState(GameState newState)
     {
-        m_State = newState;
+        m_GameState = newState;
+    }
+
+    public GameState GetGameState()
+    {
+        return m_GameState;
+    }
+
+    void SetMenuState(MenuState newState)
+    {
+        m_MenuState = newState;
+    }
+
+    public MenuState GetMenuState()
+    {
+        return m_MenuState;
+    }
+
+    void LoadScene(int index)
+    {
+        if (index >= 0 && index < SceneManager.sceneCountInBuildSettings)
+            SceneManager.LoadScene(index);
+        else
+            Debug.Log("ERROR, loadscene index is either negative or out of range: " + index);
+    }
+
+    public void LoadCurrentScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void LoadMainMenu()
+    {
+        LoadScene(0);
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 }
