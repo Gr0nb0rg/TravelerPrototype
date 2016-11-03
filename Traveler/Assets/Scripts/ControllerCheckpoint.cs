@@ -10,6 +10,9 @@ public class ControllerCheckpoint : MonoBehaviour
     //Component vars
     ControllerPlayer m_Player;
 
+    //Paused vars
+    bool m_IsPaused = false;
+
 	void Start()
     {
         m_Player = GetComponent<ControllerPlayer>();
@@ -48,10 +51,13 @@ public class ControllerCheckpoint : MonoBehaviour
 	
 	void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (!m_IsPaused)
         {
-            m_Player.SetPosition(m_Checkpoints[m_CurrentCheckpoint].position);
-            m_Player.ResetValues();
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                m_Player.SetPosition(m_Checkpoints[m_CurrentCheckpoint].position);
+                m_Player.ResetValues();
+            }
         }
     }
 
@@ -64,5 +70,15 @@ public class ControllerCheckpoint : MonoBehaviour
     public int GetCurrent()
     {
         return m_CurrentCheckpoint;
+    }
+
+    public void SetPaused(bool state)
+    {
+        m_IsPaused = state;
+    }
+
+    public bool GetIsPaused()
+    {
+        return m_IsPaused;
     }
 }

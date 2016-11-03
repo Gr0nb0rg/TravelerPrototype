@@ -14,7 +14,6 @@ public class ControllerCamera : MonoBehaviour
     //Public vars
     public LayerMask m_ZoomMask;
     public Mode m_Mode = Mode.FollowPlayer;
-    public CursorLockMode m_CursorMode = CursorLockMode.Locked;
     public Vector3 m_Offset;
     public Vector2 m_Sensitivity = new Vector2(5, 5);
     public bool m_InvertY = false;
@@ -48,6 +47,9 @@ public class ControllerCamera : MonoBehaviour
 
     //Text vars
     Text m_Text;
+
+    //Pause vars
+    bool m_IsPaused = false;
 
 	void Start ()
     {
@@ -91,13 +93,16 @@ public class ControllerCamera : MonoBehaviour
 	
 	void Update ()
     {
-        Cursor.lockState = m_CursorMode;
-        TextUpdate();
+        if (!m_IsPaused)
+        {
+            TextUpdate();
+        }
 	}
 
     void LateUpdate()
     {
-        ModeUpdate();
+        if (!m_IsPaused)
+            ModeUpdate();
     }
 
     void ModeUpdate()
@@ -110,7 +115,7 @@ public class ControllerCamera : MonoBehaviour
         m_InvertVal = Mathf.Clamp(m_InvertVal, -1, 1);
         m_Inputs = new Vector2(Input.GetAxis("Mouse X") * m_Sensitivity.x, Input.GetAxis("Mouse Y") * m_InvertVal * m_Sensitivity.y);
 
-        var angle = Mathf.Asin(Vector3.Cross(transform.forward, m_Player.transform.forward).y) * Mathf.Rad2Deg;
+        //var angle = Mathf.Asin(Vector3.Cross(transform.forward, m_Player.transform.forward).y) * Mathf.Rad2Deg;
 
         //Set absolute X
         m_AbsoluteX += m_Inputs.x;
@@ -293,5 +298,15 @@ public class ControllerCamera : MonoBehaviour
     public Vector2 GetInput()
     {
         return m_Inputs;
+    }
+
+    public void SetPaused(bool state)
+    {
+        m_IsPaused = state;
+    }
+
+    public bool GetIsPaused()
+    {
+        return m_IsPaused;
     }
 }
