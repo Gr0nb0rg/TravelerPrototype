@@ -13,13 +13,16 @@ public class Bow : MonoBehaviour {
     private bool steadyAim = true;
     private bool bowLoaded = false;
 
+    bool m_IsPaused = false;
+
     public GameObject arrow;
 	void Start () {
 	
 	}
 	
 	void Update () {
-	    CheckBow();
+        if (!m_IsPaused)
+	        CheckBow();
 	}
 
     private void CheckBow()
@@ -45,5 +48,10 @@ public class Bow : MonoBehaviour {
         a.transform.forward = new Vector3(player.transform.forward.x, -Camera.main.transform.rotation.x, player.transform.forward.z);
         a.GetComponent<Arrow>().Velocity = (pullForce * 10);
         pullForce = 0.02f;
+    }
+
+    public void SetPaused(bool state)
+    {
+        m_IsPaused = state;
     }
 }
