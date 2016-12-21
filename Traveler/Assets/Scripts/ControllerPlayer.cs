@@ -18,7 +18,12 @@ public class ControllerPlayer : MonoBehaviour
     //Public vars
     public MovementState m_State = MovementState.Idle;
     public float m_MovementSpeed = 15.0f;
-    public float m_JumpForce = 200.0f;
+
+    public float m_StrafeTopSpeed = 15.0f;
+    public float m_ForwardTopSpeed = 20.0f;
+    public float m_BackUpTopSpeed = 10.0f;
+
+    public float m_JumpForce = 15.0f;
     public float m_MaxAngle = 45.0f;
     public float m_SlopeSpeed = 25.0f;
 
@@ -51,12 +56,17 @@ public class ControllerPlayer : MonoBehaviour
             CheckState();
 
             HorizontalUpdate();
-            JumpUpdate();
+            
 
             if (transform.position.y < -100)
                 transform.position = new Vector3(0, 10, 0);
         }  
 	}
+
+    void FixedUpdate()
+    {
+        JumpUpdate();
+    }
 
     void HorizontalUpdate()
     {
@@ -91,14 +101,15 @@ public class ControllerPlayer : MonoBehaviour
             rot = Quaternion.LookRotation(forward, Vector3.up);
         }
 
-
         //Set velocity relative to rotation
         if (m_IsOnGround)
         {
+            
             //Set velocity to input values if not sliding, else set to slopevelocity
             if (!GetState().Equals(MovementState.Sliding))
+            {
                 m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
-
+            }
             else
                 m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + (m_SlopeVelocity * m_SlopeSpeed), 3.0f * Time.deltaTime);
         }
@@ -125,7 +136,11 @@ public class ControllerPlayer : MonoBehaviour
     void JumpUpdate()
     {
         if (m_IsOnGround && Input.GetKeyDown(KeyCode.Space))
-            m_Rigidbody.AddForce(Vector3.up * m_JumpForce, ForceMode.Impulse);
+        {
+            //m_Rigidbody.AddForce(Vector3.up * m_JumpForce, ForceMode.Impulse);
+            m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpForce, m_Rigidbody.velocity.z);
+        }
+
     }
 
     void CheckState()

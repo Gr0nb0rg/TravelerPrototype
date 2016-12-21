@@ -1,0 +1,42 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Hierarki
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MovingPillar
+	StartPos
+	TargetPos
+	Pillar
+		Mesh
+			PillarTop
+			StandingArea
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Specifikationer
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MovingPillar (Rotera Denna)
+
+	Pelaren kommer alltid att röra sig fram och tillbaka mellan "StartPos" och "TargetPos" i x-led för denna transform.
+	Vill du rotera pelaren och vilken riktning den roterar, rotera detta objekt (MovingPillar)
+
+StartPos(Bry dig inte om denna)
+
+TargetPos (Slutpunkt, Flytta)
+	
+	Pelaren kommer alltid att röra sig till denna transforms y position innan den stannar.
+
+Pillar (Flytta denna)
+
+	Själva objektet som flyttas, pelaren kommer alltid att gå tillbaka till denna position efter att den har nått sin slutposition.
+
+Mesh (Skala denna)
+
+	Meshen för pelaren med sin egen skala, om du vill modifiera skalan på pelaren skala detta objekt
+
+PillarTop
+
+	Området på pelaren som spelaren ska kunna se för att aktivera pelaren
+	Punkten som ska nå TargetPos innan pelaren ska stanna.
+
+StandingArea
+
+	Trigger boxen för vart spelaren ska kunna stå på pelaren, viktig för att spelaren ska hänga med pelaren när denna flyttas
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------

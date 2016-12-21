@@ -24,7 +24,7 @@ public class ControllerCamera : MonoBehaviour
 
     //Component vars
     ControllerPlayer m_Player;
-    MeshRenderer m_PlayerRenderer;
+    SkinnedMeshRenderer m_PlayerRenderer;
 
     //Rotation vars
     float m_AbsoluteY;
@@ -54,7 +54,7 @@ public class ControllerCamera : MonoBehaviour
 	void Start ()
     {
         m_Player = GameObject.Find("Player").GetComponent<ControllerPlayer>();
-        m_PlayerRenderer = m_Player.GetComponentInChildren<MeshRenderer>();
+        m_PlayerRenderer = m_Player.GetComponentInChildren<SkinnedMeshRenderer>();
         m_Text = GameObject.Find("CameraInfo2").GetComponent<Text>();
         m_StartOffset = m_Offset;
 
