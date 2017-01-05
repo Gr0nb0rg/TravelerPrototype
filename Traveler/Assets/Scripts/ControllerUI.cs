@@ -28,7 +28,7 @@ public class ControllerUI : MonoBehaviour
     ControllerPlayer m_Player;
     ControllerCamera m_Camera;
     ControllerCheckpoint m_Checkpoints;
-    Bow m_PlayerBow;
+    //Bow m_PlayerBow;
 
     //Toggle objects
     GameObject m_CameraInfo;
@@ -39,7 +39,7 @@ public class ControllerUI : MonoBehaviour
         m_Player = GameObject.Find("Player").GetComponent<ControllerPlayer>();
         m_Camera = Camera.main.GetComponent<ControllerCamera>();
         m_Checkpoints = GameObject.Find("Player").GetComponent<ControllerCheckpoint>();
-        m_PlayerBow = m_Player.transform.FindChild("Bow").GetComponent<Bow>();
+        //m_PlayerBow = m_Player.transform.FindChild("Bow").GetComponent<Bow>();
 
         //Toggle objects
         m_CameraInfo = GameObject.Find("CameraInfo");
@@ -82,7 +82,7 @@ public class ControllerUI : MonoBehaviour
         }
 
         m_Player.SetPaused(m_IsPaused);
-        m_PlayerBow.SetPaused(m_IsPaused);
+        //m_PlayerBow.SetPaused(m_IsPaused);
         m_Camera.SetPaused(m_IsPaused);
         m_Checkpoints.SetPaused(m_IsPaused);
 
