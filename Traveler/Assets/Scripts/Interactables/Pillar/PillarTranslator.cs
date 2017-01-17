@@ -30,11 +30,11 @@ public class PillarTranslator : AbstractInteractable
     // TEMPORARY: Remove when pillars with piviot at intended top are imported
     private Transform m_pillarTop;
     private BoxCollider m_standingArea;
-    private Renderer m_renderer;
+    private MeshRenderer m_mesh;
 
     void Start()
     {
-        m_renderer = GetComponentInChildren<Renderer>();
+        m_mesh = GetComponentInChildren<MeshRenderer>();
         m_maxTran = transform.FindChild("TargetPos");
         m_startTran = transform.FindChild("StartPos");
         m_currentTran = transform.FindChild("Pillar");
@@ -47,21 +47,20 @@ public class PillarTranslator : AbstractInteractable
     {
         if (!m_pillarInMotion)
         {
-            StartCoroutine(ExtendSin());
-            //switch (m_currentStyle)
-            //{
-            //    case MovementStyle.Smooth:
-            //        StartCoroutine(ExtendSin());
-            //        break;
-            //    case MovementStyle.Constant:
-            //        StartCoroutine(ConstantExtension());
-            //        break;
-            //    case MovementStyle.SmoothInfinite:
-            //        StartCoroutine(InfiniteSin());
-            //        break;
-            //    default:
-            //        break;
-            //}
+            switch (m_currentStyle)
+            {
+                case MovementStyle.Smooth:
+                    StartCoroutine(ExtendSin());
+                    break;
+                case MovementStyle.Constant:
+                    StartCoroutine(ConstantExtension());
+                    break;
+                case MovementStyle.SmoothInfinite:
+                    StartCoroutine(InfiniteSin());
+                    break;
+                default:
+                    break;
+            }
             m_pillarInMotion = true; 
         }
     }
@@ -75,7 +74,7 @@ public class PillarTranslator : AbstractInteractable
             yield return null;
         }
         yield return new WaitForSeconds(m_secondsEnlarged);
-        StartCoroutine("Retract");
+        StartCoroutine("ConstantRetraction");
     }
     IEnumerator ConstantRetraction()
     {
@@ -91,18 +90,20 @@ public class PillarTranslator : AbstractInteractable
     {
         float sinusCurveRange;
         float offset;
-        float delta = -1f;
+        float delta = (float)(-1.4 / m_sinPillarExtendingSpeed);
 
-        sinusCurveRange = ((m_maxTran.localPosition.y) - m_startTran.localPosition.y) / 2;
-        offset = sinusCurveRange + m_startTran.localPosition.y - (m_renderer.bounds.size.y / 2);
+        sinusCurveRange = Mathf.Abs(m_maxTran.localPosition.y - m_startTran.localPosition.y) / 2;
+        offset = sinusCurveRange + m_startTran.localPosition.y - (m_mesh.transform.localScale.y/2); 
 
         while (true)
         {
             float y = offset + Mathf.Sin(delta * m_sinPillarExtendingSpeed) * sinusCurveRange;
+
             m_currentTran.localPosition = new Vector3(
                                       m_currentTran.localPosition.x,
                                       y,
                                       m_currentTran.localPosition.z);
+
             delta += Time.deltaTime;
             yield return null;
         }
@@ -110,23 +111,23 @@ public class PillarTranslator : AbstractInteractable
 
     IEnumerator ExtendSin()
     {
-        float sinusCurveRange;
-        float offset;
+        float sinusCurveRange = ((m_maxTran.localPosition.y) - m_startTran.localPosition.y) / 2;
+        float offset = sinusCurveRange + m_startTran.localPosition.y - (m_mesh.transform.localScale.y / 2);
+        float targetPos = (m_maxTran.localPosition.y - m_mesh.transform.localScale.y / 2) - 0.01f;
         float delta = (float)(-1.5 / m_sinPillarExtendingSpeed);
 
-        sinusCurveRange = ((m_maxTran.localPosition.y) - m_startTran.localPosition.y) / 2;
-        offset = sinusCurveRange + m_startTran.localPosition.y - (m_renderer.bounds.size.y / 2);
-        float targetPos = (m_maxTran.localPosition.y - m_renderer.bounds.size.y / 2) - 0.1f;
         while (true)
         {
-            print(Mathf.Sin(delta * m_sinPillarExtendingSpeed) * sinusCurveRange);
             float y = offset + Mathf.Sin(delta * m_sinPillarExtendingSpeed) * sinusCurveRange;
+
             if (targetPos < y)
                 break;
+
             m_currentTran.localPosition = new Vector3(
                                       m_currentTran.localPosition.x,
                                       y,
                                       m_currentTran.localPosition.z);
+
             delta += Time.deltaTime;
             yield return null;
         }
@@ -136,26 +137,24 @@ public class PillarTranslator : AbstractInteractable
 
     IEnumerator RetractSin()
     {
-        float sinusCurveRange;
-        float offset;
+        float sinusCurveRange = ((m_maxTran.localPosition.y) - m_startTran.localPosition.y) / 2;
+        float offset = sinusCurveRange + m_startTran.localPosition.y - (m_mesh.transform.localScale.y / 2);
+        float targetPos = (m_startTran.localPosition.y - (m_mesh.transform.localScale.y / 2) + 0.01f);
         float delta = (float)(1.5 / m_sinPillarRetractionSpeed);
-
-        sinusCurveRange = ((m_maxTran.localPosition.y) - m_startTran.localPosition.y) / 2;
-        offset = sinusCurveRange + m_startTran.localPosition.y - (m_renderer.bounds.size.y / 2);
-
-        float previousY = m_startTran.localPosition.y - (m_renderer.bounds.size.y / 2) + Mathf.Sin(delta * m_sinPillarRetractionSpeed) * sinusCurveRange * 2;
 
         while (true)
         {
             float y = offset + Mathf.Sin(delta * m_sinPillarRetractionSpeed) * sinusCurveRange;
-            if ((m_startTran.localPosition.y - (m_renderer.bounds.size.y / 2)+ 0.01f) > y)
+
+            if (targetPos > y)
                 break;
+ 
             m_currentTran.localPosition = new Vector3(
                                       m_currentTran.localPosition.x,
                                       y,
                                       m_currentTran.localPosition.z);
+
             delta += Time.deltaTime;
-            previousY = y;
             yield return null;
         }
         m_pillarInMotion = false;
