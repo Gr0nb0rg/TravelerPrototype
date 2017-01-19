@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Rigidbody))]
 public class ControllerPlayer : MonoBehaviour
 {
     public enum MovementState
@@ -28,19 +29,19 @@ public class ControllerPlayer : MonoBehaviour
     public float m_SlopeSpeed = 25.0f;
 
     //Component vars
-    Rigidbody m_Rigidbody;
-    Collider m_Collider;
-    ControllerCamera m_Camera;
+    private Rigidbody m_Rigidbody;
+    private Collider m_Collider;
+    private ControllerCamera m_Camera;
 
     //Jump vars
-    bool m_IsOnGround = false;
+    private bool m_IsOnGround = false;
 
     //Movement vars
-    RaycastHit m_Hit;
-    Vector3 m_SlopeVelocity;
+    private RaycastHit m_Hit;
+    private Vector3 m_SlopeVelocity;
 
     //Paused vars
-    bool m_IsPaused = false;
+    private bool m_IsPaused = false;
 
 	void Start()
     {
@@ -56,7 +57,6 @@ public class ControllerPlayer : MonoBehaviour
             CheckState();
 
             HorizontalUpdate();
-            
 
             if (transform.position.y < -100)
                 transform.position = new Vector3(0, 10, 0);
