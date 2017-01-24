@@ -115,23 +115,23 @@ public class ControllerUI : MonoBehaviour
         return m_MenuState;
     }
 
-    void LoadScene(int index)
-    {
-        if (index >= 0 && index < SceneManager.sceneCountInBuildSettings)
-            SceneManager.LoadScene(index);
-        else
-            Debug.Log("ERROR, loadscene index is either negative or out of range: " + index);
-    }
+    //void LoadScene(int index)
+    //{
+    //    if (index >= 0 && index < SceneManager.sceneCountInBuildSettings)
+    //        SceneManager.LoadScene(index);
+    //    else
+    //        Debug.Log("ERROR, loadscene index is either negative or out of range: " + index);
+    //}
 
-    public void LoadCurrentScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+    //public void LoadCurrentScene()
+    //{
+    //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    //}
 
-    public void LoadMainMenu()
-    {
-        LoadScene(0);
-    }
+    //public void LoadMainMenu()
+    //{
+    //    LoadScene(0);
+    //}
 
     public void Exit()
     {

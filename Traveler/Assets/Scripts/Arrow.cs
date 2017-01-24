@@ -35,11 +35,11 @@ public class Arrow : MonoBehaviour
 
     void CheckDistance()
     {
-        //Do this? maybe bad idea, a lot of lagg...
+     
         dist += velocity;
         if (!(dist >= 5)) return;
 
-        GetComponent<RopeGenerator>().Spawn();
+        
         dist = 0;
     }
 
