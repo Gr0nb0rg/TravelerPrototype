@@ -16,6 +16,10 @@ public class Toolbox : Singleton<Toolbox>
         DontDestroyOnLoad(this);
     }
 
+    public float m_CameraSensX = 3.0f;
+    public float m_CameraSensY = 1.0f;
+    public bool m_IsYInvert = false;
+
     static public T RegisterComponent<T>() where T : Component
     {
         return Instance.GetOrAddComponent<T>();

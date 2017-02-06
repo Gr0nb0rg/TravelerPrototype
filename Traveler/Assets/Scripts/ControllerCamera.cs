@@ -53,6 +53,11 @@ public class ControllerCamera : MonoBehaviour
 
 	void Start ()
     {
+        //Set base sensitivity depending on value in toolbox
+        Toolbox.Instance.m_CameraSensX = m_Sensitivity.x;
+        Toolbox.Instance.m_CameraSensY = m_Sensitivity.y;
+        Toolbox.Instance.m_IsYInvert = m_InvertY;
+
         m_Player = GameObject.Find("Player").GetComponent<ControllerPlayer>();
         m_PlayerRenderer = m_Player.GetComponentInChildren<SkinnedMeshRenderer>();
         m_Text = GameObject.Find("CameraInfo2").GetComponent<Text>();
@@ -107,13 +112,15 @@ public class ControllerCamera : MonoBehaviour
 
     void ModeUpdate()
     {
+
+
         //Get input values
-        if (m_InvertY)
+        if (Toolbox.Instance.m_IsYInvert)
             m_InvertVal = 1;
         else
             m_InvertVal = -1;
         m_InvertVal = Mathf.Clamp(m_InvertVal, -1, 1);
-        m_Inputs = new Vector2(Input.GetAxis("Mouse X") * m_Sensitivity.x, Input.GetAxis("Mouse Y") * m_InvertVal * m_Sensitivity.y);
+        m_Inputs = new Vector2(Input.GetAxis("Mouse X") * Toolbox.Instance.m_CameraSensX, Input.GetAxis("Mouse Y") * m_InvertVal * Toolbox.Instance.m_CameraSensY);
 
         //var angle = Mathf.Asin(Vector3.Cross(transform.forward, m_Player.transform.forward).y) * Mathf.Rad2Deg;
 
@@ -308,5 +315,20 @@ public class ControllerCamera : MonoBehaviour
     public bool GetIsPaused()
     {
         return m_IsPaused;
+    }
+
+    public void SetSensitivityX(float value)
+    {
+        Toolbox.Instance.m_CameraSensX = value;
+    }
+
+    public void SetSensitivityY(float value)
+    {
+        Toolbox.Instance.m_CameraSensY = value;
+    }
+
+    public void SetInvert(bool value)
+    {
+        Toolbox.Instance.m_IsYInvert = value;
     }
 }

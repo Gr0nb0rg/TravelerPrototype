@@ -160,7 +160,6 @@ public class ControllerPlayer : MonoBehaviour
             //m_Rigidbody.AddForce(Vector3.up * m_JumpForce, ForceMode.Impulse);
             m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpForce, m_Rigidbody.velocity.z);
         }
-
     }
 
     void CheckState()
@@ -194,6 +193,7 @@ public class ControllerPlayer : MonoBehaviour
 
             }
         }
+        DrawCast(transform.position, transform.forward, 10);
     }
 
     bool IsOnGround()
@@ -204,7 +204,6 @@ public class ControllerPlayer : MonoBehaviour
 
         Vector3 tempV = Vector3.zero;
         Vector3 v = new Vector3(transform.position.x, m_Collider.bounds.min.y + offsetHeight, transform.position.z);
-        Ray ray = new Ray();
 
         for (int i = 0; i < 4; i++)
         {
@@ -229,16 +228,9 @@ public class ControllerPlayer : MonoBehaviour
                 default:
                     break;
             }
-            ray = new Ray(tempV + v, Vector3.down);
-            Debug.DrawRay(tempV + v, Vector3.down * distance, Color.red);
-            if (Physics.Raycast(ray, out m_Hit, distance, m_StandableLayers))
+            // use 
+            if (DrawCast(tempV + v, Vector3.down, out m_Hit, distance, m_StandableLayers))
             {
-                //if (!m_IsOnGround)
-                //transform.position = new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z);
-                //transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z), 1.0f);
-                //Vector3 pos = transform.position;
-                //pos.y += -m_Hit.normal.x * Mathf.Abs(m_Rigidbody.velocity.x) * Time.deltaTime * (m_Rigidbody.velocity.x - m_Hit.normal.x > 0 ? 1 : -1);
-                //transform.position = pos;
                 if (!GetState().Equals(MovementState.Sliding))
                     m_Rigidbody.MovePosition(new Vector3(m_Rigidbody.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, m_Rigidbody.position.z));
                 return true;
@@ -250,8 +242,7 @@ public class ControllerPlayer : MonoBehaviour
 
     bool SlopeCheck(float angle, float raydist)
     {
-        Debug.DrawRay(transform.position, Vector3.down * raydist, Color.blue);
-        if (Physics.Raycast(new Ray(transform.position, Vector3.down), out m_Hit, raydist))
+        if (DrawCast(transform.position, Vector3.down, out m_Hit, raydist))
         {
             //Set slopevelocity to be relative to hit normal
             m_SlopeVelocity = new Vector3(m_Hit.normal.x, -m_Hit.normal.y, m_Hit.normal.z);
@@ -338,6 +329,68 @@ public class ControllerPlayer : MonoBehaviour
         m_releasedClimb = true;
         SetKinematic(false);
         SetGravity(true);
+    }
+
+    //Collection of raycast-functions that also draw the ray
+    bool DrawCast(Vector3 position, Vector3 direction, float distance, int layermask)
+    {
+        Color col = Color.green;
+        bool hit = false;
+        if (Physics.Raycast(position, direction, distance, layermask))
+        {
+            hit = true;
+        }
+        if (hit)
+            col = Color.red;
+        Debug.DrawRay(position, direction, col);
+
+        return hit;
+    }
+
+    bool DrawCast(Vector3 position, Vector3 direction, float distance)
+    {
+        Color col = Color.green;
+        bool hit = false;
+        if (Physics.Raycast(position, direction, distance))
+        {
+            hit = true;
+        }
+        if (hit)
+            col = Color.red;
+        Debug.DrawRay(position, direction, col);
+
+        return hit;
+    }
+
+    bool DrawCast(Vector3 position, Vector3 direction, out RaycastHit info, float distance)
+    {
+        Color col = Color.green;
+        bool hit = false;
+        if (Physics.Raycast(position, direction, out info, distance))
+        {
+            hit = true;
+        }
+        if (hit)
+            col = Color.red;
+        Debug.DrawRay(position, direction, col);
+
+        return hit;
+    }
+
+    bool DrawCast(Vector3 position, Vector3 direction, out RaycastHit info, float distance, int layermask)
+    {
+        Color col = Color.green;
+        bool hit = false;
+        Ray ray = new Ray(position, direction);
+        if (Physics.Raycast(ray, out info, distance, layermask))
+        {
+            hit = true;
+        }
+        if (hit)
+            col = Color.red;
+        Debug.DrawRay(position, direction, col);
+
+        return hit;
     }
 
     void SetState(MovementState newState)

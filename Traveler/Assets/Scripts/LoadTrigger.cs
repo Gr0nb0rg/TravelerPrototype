@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Assets.Scripts;
 using UnityEngine;
+
 [ExecuteInEditMode]
 public class LoadTrigger : MonoBehaviour
 {

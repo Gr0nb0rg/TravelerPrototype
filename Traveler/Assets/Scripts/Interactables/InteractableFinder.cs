@@ -34,8 +34,8 @@ public class InteractableFinder : MonoBehaviour {
         m_activeInteractables = GameObject.FindGameObjectsWithTag("Pillar");
         for (int i = 0; i < m_activeInteractables.Length; i++)
         {
-            m_interactableRend.Add(m_activeInteractables[i].GetComponentInChildren<Renderer>());
-            m_raycastTargets.Add(m_activeInteractables[i].transform.FindChild("RaycastTarget"));
+            m_interactableRend.Add(m_activeInteractables[i].GetComponent<Renderer>());
+            m_raycastTargets.Add(m_activeInteractables[i].transform.FindChild("PillarTop"));
         }
         InvokeRepeating(m_currentFindingType, 0.0f, m_updateFrequency);
     }
@@ -46,19 +46,7 @@ public class InteractableFinder : MonoBehaviour {
         {
             if (m_activeInteractables.Length > 0 && Vector3.Distance(m_player.transform.position, m_raycastTargets[m_closestIndex].transform.position) < m_range)
             {
-
                 m_activeInteractables[m_closestIndex].GetComponentInParent<AbstractInteractable>().Interact();
-                //switch (m_activeInteractables[m_closestIndex].tag)
-                //{
-                //    case "Pillar":
-                //        m_activeInteractables[m_closestIndex].GetComponentInParent<PillarTranslator>().ActivatePillar();
-                //        break;
-                //    case "Button":
-                //        m_activeInteractables[m_closestIndex].GetComponentInParent<PillarTranslator>().ActivatePillar();
-                //        break;
-                //    default:
-                //        break;
-                //}
             }
         }
     }
@@ -120,10 +108,6 @@ public class InteractableFinder : MonoBehaviour {
                     {
                         m_interactableRend[i].material = m_defMat;
                     }
-                }
-                else
-                {
-                    m_interactableRend[i].material = m_defMat;
                 }
             }
             else

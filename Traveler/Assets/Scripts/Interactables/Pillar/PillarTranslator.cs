@@ -39,7 +39,7 @@ public class PillarTranslator : AbstractInteractable
         m_startTran = transform.FindChild("StartPos");
         m_currentTran = transform.FindChild("Pillar");
         m_meshTran = m_currentTran.transform.FindChild("Mesh");
-        m_pillarTop = m_meshTran.transform.FindChild("RaycastTarget");
+        m_pillarTop = m_meshTran.transform.FindChild("PillarTop");
         m_startTran.position = m_pillarTop.transform.position;
     }
 
