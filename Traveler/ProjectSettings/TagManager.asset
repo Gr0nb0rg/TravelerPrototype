@@ -6,9 +6,9 @@ TagManager:
   tags:
   - LookAtTransform
   - Checkpoint
-  - Pillar
   - ClimbWall
   - ClimbLedge
+  - Interactable
   layers:
   - Default
   - TransparentFX

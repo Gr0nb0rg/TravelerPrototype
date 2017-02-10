@@ -4,6 +4,9 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(ControllerWallClimbing))]
 [RequireComponent(typeof(ControllerLedgeClimbing))]
+[RequireComponent(typeof(PlayerCollisions))]
+[RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(ControllerCheckpoint))]
 public class ControllerPlayer : MonoBehaviour
 {
     public enum MovementState

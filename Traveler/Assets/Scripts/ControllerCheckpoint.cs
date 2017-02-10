@@ -67,6 +67,11 @@ public class ControllerCheckpoint : MonoBehaviour
         Debug.Log("Current checkpoint set to: " + m_CurrentCheckpoint);
     }
 
+    public Transform GetCurrentCheckpoint()
+    {
+        return m_Checkpoints[m_CurrentCheckpoint];
+    }
+
     public int GetCurrent()
     {
         return m_CurrentCheckpoint;

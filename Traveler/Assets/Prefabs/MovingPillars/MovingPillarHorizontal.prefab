@@ -28,6 +28,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1285587450418390
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4511155357085870}
+  - component: {fileID: 114499129628592130}
+  m_Layer: 0
+  m_Name: InteractableTarget (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1340528125944152
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,10 +52,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4952949290959922}
-  - component: {fileID: 114514938446705278}
+  - component: {fileID: 114508100117845364}
+  - component: {fileID: 114624366801664940}
+  - component: {fileID: 114615747642382712}
   m_Layer: 9
   m_Name: MovingPillarHorizontal
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87,7 +105,7 @@ GameObject:
   - component: {fileID: 23003048008166544}
   m_Layer: 9
   m_Name: Mesh
-  m_TagString: Pillar
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,6 +166,19 @@ Transform:
   m_Father: {fileID: 4705738054012902}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4511155357085870
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1285587450418390}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0.75, y: 0.332, z: -0.01}
+  m_LocalScale: {x: 0.054141868, y: 1, z: 0.47846892}
+  m_Children: []
+  m_Father: {fileID: 4705738054012902}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4695416619155650
 Transform:
   m_ObjectHideFlags: 1
@@ -173,6 +204,7 @@ Transform:
   m_Children:
   - {fileID: 4250964744976774}
   - {fileID: 4239495272518240}
+  - {fileID: 4511155357085870}
   m_Father: {fileID: 4741984535276070}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -292,7 +324,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5124f1c670abf154987f3c7b74d2d88d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114514938446705278
+--- !u!114 &114499129628592130
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1285587450418390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 658bf5bee01ea8946b45638c7a58eddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114508100117845364
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -300,12 +343,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 1340528125944152}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 528d682811affd7429585c9598c407a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f687c8350ab97349b92d6b92981ad73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_currentStyle: 2
-  m_secondsEnlarged: 2
-  m_constantPillarExtendingSpeed: 1
-  m_constantPillarRetractionSpeed: 1
-  m_sinPillarExtendingSpeed: 2
-  m_sinPillarRetractionSpeed: 2
+--- !u!114 &114615747642382712
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1340528125944152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b370c50957ee4847990d03c0c247c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114624366801664940
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1340528125944152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24bc3917fe8aa62418e478df95dc5c2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_secondsEnlarged: 1
+  m_extendingSpeed: 5
+  m_retractionSpeed: 5
+  m_alwaysActive: 0
