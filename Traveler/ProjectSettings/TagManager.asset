@@ -9,6 +9,8 @@ TagManager:
   - ClimbWall
   - ClimbLedge
   - Interactable
+  - Pillar
+  - Killbox
   layers:
   - Default
   - TransparentFX
