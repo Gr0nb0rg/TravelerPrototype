@@ -196,6 +196,26 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 224974490843327292, guid: 8c21e187fae7cbb4298925cf9e1ea753,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224597322802999306, guid: 8c21e187fae7cbb4298925cf9e1ea753,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224638265262386768, guid: 8c21e187fae7cbb4298925cf9e1ea753,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224782950755005616, guid: 8c21e187fae7cbb4298925cf9e1ea753,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8c21e187fae7cbb4298925cf9e1ea753, type: 2}
   m_IsPrefabParent: 0
@@ -210,6 +230,10 @@ GameObject:
   - component: {fileID: 939132234}
   - component: {fileID: 939132233}
   - component: {fileID: 939132236}
+  - component: {fileID: 939132239}
+  - component: {fileID: 939132238}
+  - component: {fileID: 939132237}
+  - component: {fileID: 939132240}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -244,13 +268,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_State: 0
-  m_MovementSpeed: 15
+  m_MovementSpeed: 10
   m_StrafeTopSpeed: 15
   m_ForwardTopSpeed: 20
   m_BackUpTopSpeed: 10
-  m_JumpForce: 15
+  m_JumpForce: 10
   m_MaxAngle: 45
   m_SlopeSpeed: 25
+  m_climbCheckRayDist: 0.35
+  m_climbRaycheckR: {fileID: 1972472711}
+  m_climbRaycheckL: {fileID: 1284063638}
+  m_StandableLayers:
+    serializedVersion: 2
+    m_Bits: 4294964169
 --- !u!4 &939132235
 Transform:
   m_ObjectHideFlags: 0
@@ -261,6 +291,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1972472711}
+  - {fileID: 1284063638}
   - {fileID: 2015494074}
   - {fileID: 1172425967}
   m_Father: {fileID: 0}
@@ -279,10 +311,106 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CurrentCheckpoint: 0
   m_Checkpoints: []
+--- !u!114 &939132237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 939132232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0e0f93285620546bbc0e5dfedd6a4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_distFromWall: 0.4
+  m_wallEdgeLimit: 0.1
+  m_climbSpeed: 3
+  m_rotationAdjustmentSpeed: 0
+  m_showFindingRays: 0
+  m_showMovementDirectionRays: 0
+  m_climbWallMask:
+    serializedVersion: 2
+    m_Bits: 2048
+--- !u!114 &939132238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 939132232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8140440593c8f34468f00c8ee946751a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_updateRootEachFrame: 0
+  m_transitionDuration: 0.4
+  m_vaultCheckMask:
+    serializedVersion: 2
+    m_Bits: 2048
+--- !u!136 &939132239
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 939132232}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.20113418
+  m_Height: 1.55
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &939132240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 939132232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f639ff68ac21564ca446db74c631166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_range: 10
+  m_updateFrequency: 0.01
+  m_obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  m_foundMat: {fileID: 2100000, guid: 3b9c5969c2e5e9b48969ee1348536402, type: 2}
+  m_defMat: {fileID: 2100000, guid: e8284f2c9ca443841957020ae277d8cb, type: 2}
+  m_closestMat: {fileID: 2100000, guid: 1c9596660a5b658489f9fc5aa6446c39, type: 2}
 --- !u!4 &1172425967 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400168, guid: b235179bd2a63d1468dd430670338c55, type: 3}
   m_PrefabInternal: {fileID: 1468205509}
+--- !u!1 &1284063637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1284063638}
+  m_Layer: 0
+  m_Name: ClimbCheckL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1284063638
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1284063637}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.164, y: 0.502, z: 0.038}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 939132235}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1468205509
 Prefab:
   m_ObjectHideFlags: 0
@@ -324,7 +452,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400168, guid: b235179bd2a63d1468dd430670338c55, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400316, guid: b235179bd2a63d1468dd430670338c55, type: 3}
       propertyPath: m_LocalRotation.x
@@ -757,6 +885,62 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b235179bd2a63d1468dd430670338c55, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &1794776217 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100168, guid: b235179bd2a63d1468dd430670338c55, type: 3}
+  m_PrefabInternal: {fileID: 1468205509}
+--- !u!114 &1794776218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1794776217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016655b224b6c2a4c939cc77bf9bff1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ikActive: 0
+  m_leftIkWeight: 1
+  m_rightIkWeight: 1
+  m_rightHandTarget: {fileID: 0}
+  m_leftHandTarget: {fileID: 0}
+  m_rightFootTarget: {fileID: 0}
+  m_leftFootTarget: {fileID: 0}
+  m_rightArmHint: {fileID: 0}
+  m_leftArmHint: {fileID: 0}
+  m_rightLegHint: {fileID: 0}
+  m_leftLegHint: {fileID: 0}
+  m_root: {fileID: 0}
+  m_lookObj: {fileID: 0}
+--- !u!1 &1972472710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1972472711}
+  m_Layer: 0
+  m_Name: ClimbCheckR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1972472711
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1972472710}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.164, y: 0.502, z: 0.038}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 939132235}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2015494073
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,7 +956,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2015494074
 Transform:
   m_ObjectHideFlags: 0
@@ -784,7 +968,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 939132235}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2015494075
 CapsuleCollider:

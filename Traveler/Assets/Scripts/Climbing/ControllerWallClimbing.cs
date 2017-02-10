@@ -23,12 +23,6 @@ public class ControllerWallClimbing : MonoBehaviour {
     [SerializeField]
     private float m_wallEdgeLimit;
     [SerializeField]
-    private float m_climbStep;
-    [SerializeField]
-    private float m_playerHeight;
-    [SerializeField]
-    private float m_playerWidth;
-    [SerializeField]
     private float m_climbSpeed;
     [SerializeField]
     private float m_rotationAdjustmentSpeed;
@@ -36,12 +30,18 @@ public class ControllerWallClimbing : MonoBehaviour {
     private bool m_showFindingRays = false;
     [SerializeField]
     private bool m_showMovementDirectionRays = false;
+
     // Mask to be assigned in editor
     [SerializeField]
     private LayerMask m_climbWallMask;
 
-    // PRIVATE
+    // Component variables
     private ControllerPlayer m_playerController;
+    private CapsuleCollider m_playerCollider;
+
+    // Reference values
+    private float m_playerHeight;
+    private float m_playerWidth;
 
     private enum Direction{
         UP, DOWN, LEFT, RIGHT
@@ -50,6 +50,9 @@ public class ControllerWallClimbing : MonoBehaviour {
     void Start()
     {
         m_playerController = GetComponent<ControllerPlayer>();
+        m_playerCollider = GetComponent<CapsuleCollider>();
+        m_playerWidth = m_playerCollider.bounds.size.x;
+        m_playerHeight = m_playerCollider.bounds.size.y;
     }
 
     void Update()
@@ -65,13 +68,12 @@ public class ControllerWallClimbing : MonoBehaviour {
     void UpdateMovement()
     {
         // Create movement direction based on player input
-        float step = m_climbSpeed * Time.deltaTime;
         Vector3 positionChange = new Vector3(0, 0, 0);
         if (Input.GetKey(KeyCode.W))
         {
             if (DirectionAvailable(Direction.UP))
             {
-                Vector3 originU = (transform.up.normalized * (m_climbStep));
+                Vector3 originU = (transform.up.normalized);
                 if (m_showMovementDirectionRays)
                     Debug.DrawLine(transform.position, transform.position + originU, Color.red);
                 positionChange += originU;
@@ -81,7 +83,7 @@ public class ControllerWallClimbing : MonoBehaviour {
         {
             if (DirectionAvailable(Direction.LEFT))
             {
-                Vector3 originL = (Vector3.Cross(transform.forward, transform.up).normalized * (m_climbStep));
+                Vector3 originL = (Vector3.Cross(transform.forward, transform.up).normalized);
                 if (m_showMovementDirectionRays)
                     Debug.DrawLine(transform.position, transform.position + originL, Color.red);
                 positionChange += originL;
@@ -91,7 +93,7 @@ public class ControllerWallClimbing : MonoBehaviour {
         {
             if (DirectionAvailable(Direction.DOWN))
             {
-                Vector3 originD = (-transform.up.normalized * (m_climbStep));
+                Vector3 originD = (-transform.up.normalized);
                 if (m_showMovementDirectionRays)
                     Debug.DrawLine(transform.position, transform.position + originD, Color.red);
                 positionChange += originD;
@@ -101,7 +103,7 @@ public class ControllerWallClimbing : MonoBehaviour {
         {
             if (DirectionAvailable(Direction.RIGHT))
             {
-                Vector3 originR = (Vector3.Cross(transform.forward, transform.up).normalized * -(m_climbStep));
+                Vector3 originR = (-Vector3.Cross(transform.forward, transform.up).normalized);
                 if(m_showMovementDirectionRays)
                     Debug.DrawLine(transform.position, transform.position+originR, Color.red);
                 positionChange += originR;
