@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ZoomMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4294967291
   m_Mode: 0
   m_Offset: {x: 2, y: 0, z: 5}
   m_Sensitivity: {x: 3, y: 1}
@@ -220,8 +220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f639ff68ac21564ca446db74c631166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_activationKey: 0
   m_range: 0
-  m_updateFrequency: 0.01
+  m_skipThisManyFrames: 5
   m_obstacleLayer:
     serializedVersion: 2
     m_Bits: 4294965449

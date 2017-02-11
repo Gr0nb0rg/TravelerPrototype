@@ -17,6 +17,13 @@ public class ControllerCheckpoint : MonoBehaviour
     {
         m_Player = GetComponent<ControllerPlayer>();
 
+        if (!m_Player)
+        {
+            Debug.Log("Controllercheckpoint could not find controllerplayer!");
+            enabled = false;
+            return;
+        }
+
         //Find checkpoints
         var checkpoints = GameObject.FindGameObjectsWithTag("Checkpoint");
         if (checkpoints.Length > 0)
@@ -48,23 +55,24 @@ public class ControllerCheckpoint : MonoBehaviour
         else
             Debug.Log("Couldn't find any checkpoints!");
 	}
-	
-	void Update()
+
+    void Update()
     {
-        if (!m_IsPaused)
-        {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                m_Player.SetPosition(m_Checkpoints[m_CurrentCheckpoint].position);
-                m_Player.ResetValues();
-            }
-        }
+        if (transform.position.y < -100)
+            SetPlayerToCurrent();
     }
 
     public void SetCurrent(int id)
     {
         m_CurrentCheckpoint = id;
         Debug.Log("Current checkpoint set to: " + m_CurrentCheckpoint);
+    }
+
+    public void SetPlayerToCurrent()
+    {
+        m_Player.SetPosition(m_Checkpoints[m_CurrentCheckpoint].position);
+        m_Player.ResetValues();
+        Debug.Log("Set player to checkpoint " + m_CurrentCheckpoint);
     }
 
     public Transform GetCurrentCheckpoint()

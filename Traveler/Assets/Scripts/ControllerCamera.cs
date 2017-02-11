@@ -239,7 +239,8 @@ public class ControllerCamera : MonoBehaviour
 
     void TextUpdate()
     {
-        m_Text.text = "Current mode: " + m_Mode.ToString() + "\nCurrent lookat index: " + m_CurrentLookAt;
+        if (m_Text)
+            m_Text.text = "Current mode: " + m_Mode.ToString() + "\nCurrent lookat index: " + m_CurrentLookAt;
     }
 
     bool IsColliding()

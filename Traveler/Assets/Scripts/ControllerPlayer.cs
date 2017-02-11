@@ -77,9 +77,6 @@ public class ControllerPlayer : MonoBehaviour
             CheckForClimbingAreas();
             CheckState();
             HorizontalUpdate();
-
-            if (transform.position.y < -100)
-                transform.position = new Vector3(0, 10, 0);
         }
     }
 
