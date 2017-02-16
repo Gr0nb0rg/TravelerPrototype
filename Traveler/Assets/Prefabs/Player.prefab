@@ -2630,7 +2630,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_State: 0
-  m_MovementSpeed: 7
+  m_MovementSpeed: 10
+  m_IsAirControl: 1
+  m_AirMulti: 1
+  m_AirAcc: 2
   m_StrafeTopSpeed: 15
   m_ForwardTopSpeed: 20
   m_BackUpTopSpeed: 10
@@ -2707,9 +2710,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_distFromWall: 0.5
   m_wallEdgeLimit: 0.1
-  m_climbStep: 3
-  m_playerHeight: 1.6
-  m_playerWidth: 0.5
   m_climbSpeed: 3
   m_rotationAdjustmentSpeed: 0
   m_showFindingRays: 0
