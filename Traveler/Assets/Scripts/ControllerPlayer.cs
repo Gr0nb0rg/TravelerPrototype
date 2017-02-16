@@ -2,6 +2,11 @@
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(ControllerWallClimbing))]
+[RequireComponent(typeof(ControllerLedgeClimbing))]
+[RequireComponent(typeof(PlayerCollisions))]
+[RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(ControllerCheckpoint))]
 public class ControllerPlayer : MonoBehaviour
 {
     public enum MovementState
@@ -11,8 +16,8 @@ public class ControllerPlayer : MonoBehaviour
         Jumping,
         Falling,
         Running,
-        Grabbing,
-        Climbing,
+        LedgeClimbing,
+        WallClimbing,
         Sliding
     }
 
@@ -32,36 +37,48 @@ public class ControllerPlayer : MonoBehaviour
     private Rigidbody m_Rigidbody;
     private Collider m_Collider;
     private ControllerCamera m_Camera;
+    private ControllerWallClimbing m_controllerWallClimbing;
+    private ControllerLedgeClimbing m_controllerLedgeClimbing;
+
+    // Climbing vars
+    [SerializeField]
+    private float m_climbCheckRayDist;
+    [SerializeField]
+    private Transform m_climbRaycheckR;
+    [SerializeField]
+    private Transform m_climbRaycheckL;
+    private bool m_releasedClimb = false;
 
     //Jump vars
     private bool m_IsOnGround = false;
 
     //Movement vars
+    [SerializeField]
+    private LayerMask m_StandableLayers;
     private RaycastHit m_Hit;
     private Vector3 m_SlopeVelocity;
 
     //Paused vars
     private bool m_IsPaused = false;
 
-	void Start()
+    void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
-        m_Collider = GetComponentInChildren<CapsuleCollider>();
+        m_Collider = GetComponent<CapsuleCollider>();
         m_Camera = Camera.main.GetComponent<ControllerCamera>();
-	}
-	
-	void Update()
+        m_controllerWallClimbing = GetComponent<ControllerWallClimbing>();
+        m_controllerLedgeClimbing = GetComponent<ControllerLedgeClimbing>();
+    }
+
+    void Update()
     {
         if (!m_IsPaused)
         {
+            CheckForClimbingAreas();
             CheckState();
-
             HorizontalUpdate();
-
-            if (transform.position.y < -100)
-                transform.position = new Vector3(0, 10, 0);
-        }  
-	}
+        }
+    }
 
     void FixedUpdate()
     {
@@ -70,72 +87,75 @@ public class ControllerPlayer : MonoBehaviour
 
     void HorizontalUpdate()
     {
-        //Get forward rotation
-        Vector3 forward = Camera.main.transform.forward;
-        forward.y = 0;
-        Quaternion rot; //= Quaternion.LookRotation(forward, Vector3.up);
-
-        //Set rotation to camera look if mode is followplayer
-        if (m_Camera.GetMode().Equals(Mode.FollowPlayer))
+        if (!GetState().Equals(MovementState.WallClimbing) && !GetState().Equals(MovementState.LedgeClimbing))
         {
-            if (!GetState().Equals(MovementState.Moving))
+            //Get forward rotation
+            Vector3 forward = Camera.main.transform.forward;
+            forward.y = 0;
+            Quaternion rot; //= Quaternion.LookRotation(forward, Vector3.up);
+
+            //Set rotation to camera look if mode is followplayer
+            if (m_Camera.GetMode().Equals(Mode.FollowPlayer))
             {
-                //If player is still then the rotation should be static
-                Vector3 f = transform.forward;
-                f.y = 0;
-                rot = Quaternion.LookRotation(f, Vector3.up);
+                if (!GetState().Equals(MovementState.Moving))
+                {
+                    //If player is still then the rotation should be static
+                    Vector3 f = transform.forward;
+                    f.y = 0;
+                    rot = Quaternion.LookRotation(f, Vector3.up);
+                }
+                else
+                {
+                    //If the player is moving the the rotation will be set to the cameras direction
+                    Quaternion q = Camera.main.transform.rotation;
+                    transform.rotation = Quaternion.Lerp(transform.rotation, new Quaternion(transform.rotation.x, q.y, transform.rotation.z, q.w), 10 * Time.deltaTime);
+
+                    rot = Quaternion.LookRotation(forward, Vector3.up);
+                }
             }
+            //Set rotation to X input if not in followplayer mode
             else
             {
-                //If the player is moving the the rotation will be set to the cameras direction
-                Quaternion q = Camera.main.transform.rotation;
-                transform.rotation = Quaternion.Lerp(transform.rotation, new Quaternion(transform.rotation.x, q.y, transform.rotation.z, q.w), 10 * Time.deltaTime);
-
+                transform.Rotate(0, m_Camera.GetInput().x, 0);
                 rot = Quaternion.LookRotation(forward, Vector3.up);
             }
-        }
-        //Set rotation to X input if not in followplayer mode
-        else
-        {
-            transform.Rotate(0, m_Camera.GetInput().x, 0);
-            rot = Quaternion.LookRotation(forward, Vector3.up);
-        }
 
-        //Set velocity relative to rotation
-        if (m_IsOnGround)
-        {
-            
-            //Set velocity to input values if not sliding, else set to slopevelocity
-            if (!GetState().Equals(MovementState.Sliding))
+            //Set velocity relative to rotation
+            if (m_IsOnGround)
             {
-                m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
-            }
-            else
-                m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + (m_SlopeVelocity * m_SlopeSpeed), 3.0f * Time.deltaTime);
-        }
 
-        /*float dist = 1.3f;
-        Debug.DrawRay(transform.position, Vector3.down * dist, Color.green);
-        if (Physics.Raycast(new Ray(transform.position, Vector3.down), out m_Hit, dist))
-        {
-            transform.position = m_Hit.point;
-            if (!m_IsOnGround)
-                transform.position = new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z);
-            m_Rigidbody.MovePosition(new Vector3(m_Rigidbody.transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, m_Rigidbody.transform.position.z));
-            transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z), 1.0f);
+                //Set velocity to input values if not sliding, else set to slopevelocity
+                if (!GetState().Equals(MovementState.Sliding))
+                {
+                    m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+                }
+                else
+                    m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + (m_SlopeVelocity * m_SlopeSpeed), 3.0f * Time.deltaTime);
+            }
+
+            /*float dist = 1.3f;
+            Debug.DrawRay(transform.position, Vector3.down * dist, Color.green);
+            if (Physics.Raycast(new Ray(transform.position, Vector3.down), out m_Hit, dist))
+            {
+                transform.position = m_Hit.point;
+                if (!m_IsOnGround)
+                    transform.position = new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z);
+                m_Rigidbody.MovePosition(new Vector3(m_Rigidbody.transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, m_Rigidbody.transform.position.z));
+                transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, transform.position.z), 1.0f);
+            }
+            float yDisplacement = m_Rigidbody.velocity.y;
+            float xDisplacement = m_Rigidbody.velocity.x;
+            if (-Mathf.Abs(xDisplacement) < yDisplacement && yDisplacement < 0)
+            {
+                yDisplacement = -Mathf.Abs(xDisplacement) - 0.001f;
+            }
+            m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, yDisplacement, m_Rigidbody.velocity.z);*/
         }
-        float yDisplacement = m_Rigidbody.velocity.y;
-        float xDisplacement = m_Rigidbody.velocity.x;
-        if (-Mathf.Abs(xDisplacement) < yDisplacement && yDisplacement < 0)
-        {
-            yDisplacement = -Mathf.Abs(xDisplacement) - 0.001f;
-        }
-        m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, yDisplacement, m_Rigidbody.velocity.z);*/
     }
 
     void JumpUpdate()
     {
-        if (m_IsOnGround && Input.GetKeyDown(KeyCode.Space))
+        if (m_IsOnGround && Input.GetKeyDown(KeyCode.Space) && (m_State != MovementState.WallClimbing) && (m_State != MovementState.LedgeClimbing))
         {
             //m_Rigidbody.AddForce(Vector3.up * m_JumpForce, ForceMode.Impulse);
             m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpForce, m_Rigidbody.velocity.z);
@@ -144,30 +164,34 @@ public class ControllerPlayer : MonoBehaviour
 
     void CheckState()
     {
-        //Checks what current movementstate the player should be in
-        if (IsOnGround())
+        if (!GetState().Equals(MovementState.WallClimbing) && !GetState().Equals(MovementState.LedgeClimbing))
         {
-            if (!SlopeCheck(m_MaxAngle, 1.5f))
+            //Checks what current movementstate the player should be in
+            if (IsOnGround())
             {
-                if (m_Rigidbody.velocity.magnitude > 1)
-                    SetState(MovementState.Moving);
+                if (!SlopeCheck(m_MaxAngle, 1.5f))
+                {
+                    if (m_Rigidbody.velocity.magnitude > 1)
+                        SetState(MovementState.Moving);
+                    else
+                        SetState(MovementState.Idle);
+                }
                 else
-                    SetState(MovementState.Idle);
+                    SetState(MovementState.Sliding);
+                m_releasedClimb = false;
+                m_IsOnGround = true;
+                SetGravity(false);
             }
             else
-                SetState(MovementState.Sliding);
+            {
+                m_IsOnGround = false;
+                SetGravity(true);
+                if (m_Rigidbody.velocity.y > 0)
+                    SetState(MovementState.Jumping);
+                else
+                    SetState(MovementState.Falling);
 
-            m_IsOnGround = true;
-            SetGravity(false);
-        }
-        else
-        {
-            m_IsOnGround = false;
-            SetGravity(true);
-            if (m_Rigidbody.velocity.y > 0)
-                SetState(MovementState.Jumping);
-            else
-                SetState(MovementState.Falling);
+            }
         }
         DrawCast(transform.position, transform.forward, 10);
     }
@@ -204,7 +228,8 @@ public class ControllerPlayer : MonoBehaviour
                 default:
                     break;
             }
-            if (DrawCast(tempV + v, Vector3.down, out m_Hit, distance))
+            // use 
+            if (DrawCast(tempV + v, Vector3.down, out m_Hit, distance, m_StandableLayers))
             {
                 if (!GetState().Equals(MovementState.Sliding))
                     m_Rigidbody.MovePosition(new Vector3(m_Rigidbody.position.x, m_Hit.point.y + m_Collider.bounds.size.y / 2, m_Rigidbody.position.z));
@@ -230,6 +255,80 @@ public class ControllerPlayer : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void CheckForClimbingAreas()
+    {
+        if ((GetState().Equals(MovementState.Jumping) || GetState().Equals(MovementState.Falling)) && !m_releasedClimb)
+        {
+            Vector3 endpointR = ((transform.forward.normalized * m_climbCheckRayDist) + m_climbRaycheckR.position);
+            Vector3 endpointL = ((transform.forward.normalized * m_climbCheckRayDist) + m_climbRaycheckL.position);
+            Debug.DrawLine(m_climbRaycheckR.position, endpointR, Color.blue);
+            Debug.DrawLine(m_climbRaycheckL.position, endpointL, Color.blue);
+
+            // Shoot two rays from above head
+            RaycastHit hitR;
+            RaycastHit hitL;
+            if (
+                Physics.Linecast(m_climbRaycheckR.position, endpointR, out hitR)
+                &&
+                Physics.Linecast(m_climbRaycheckL.position, endpointL, out hitL))
+            {
+                // Did both hit ledge trigger?
+                if (hitL.collider.gameObject.tag.Equals("ClimbLedge") && hitR.collider.gameObject.tag.Equals("ClimbLedge"))
+                {
+                    // Start climbing at climb target closest to a point between raycasts
+                    ActivateLedgeClimbing(hitR.collider.gameObject.GetComponent<ClimbTargetCollection>().GetClosestTarget(transform.position));
+                }
+                // Did both hit wall trigger?
+                else if (hitL.collider.gameObject.tag.Equals("ClimbWall") && hitR.collider.gameObject.tag.Equals("ClimbWall"))
+                {
+                    ActivateWallClimbing(hitL.collider.gameObject.transform.rotation);
+                }
+            }
+        }
+    }
+
+    // Go into wall climbing mode
+    public void ActivateWallClimbing(Quaternion wallRotaion)
+    {
+        SetState(MovementState.WallClimbing);
+        m_controllerWallClimbing.enabled = true;
+        m_controllerWallClimbing.InitiateClimb(wallRotaion);
+        SetKinematic(true);
+        SetGravity(false);
+    }
+
+    // Go out of wall climbing mode
+    public void DeactivateWallClimbing()
+    {
+        SetState(MovementState.Falling);
+        if (m_controllerWallClimbing.enabled == true)
+            m_controllerWallClimbing.enabled = false;
+        m_releasedClimb = true;
+        SetKinematic(false);
+        SetGravity(true);
+    }
+
+    // Go into ledge climbing mode
+    public void ActivateLedgeClimbing(ClimbTarget initialTarget)
+    {
+        SetState(MovementState.LedgeClimbing);
+        m_controllerLedgeClimbing.enabled = true;
+        m_controllerLedgeClimbing.InitiateClimb(initialTarget);
+        SetKinematic(true);
+        SetGravity(false);
+    }
+
+    // Go out of ledge climbing mode
+    public void DeactivateLedgeClimbing()
+    {
+        SetState(MovementState.Falling);
+        if (m_controllerLedgeClimbing.enabled == true)
+            m_controllerLedgeClimbing.enabled = false;
+        m_releasedClimb = true;
+        SetKinematic(false);
+        SetGravity(true);
     }
 
     //Collection of raycast-functions that also draw the ray
@@ -278,6 +377,22 @@ public class ControllerPlayer : MonoBehaviour
         return hit;
     }
 
+    bool DrawCast(Vector3 position, Vector3 direction, out RaycastHit info, float distance, int layermask)
+    {
+        Color col = Color.green;
+        bool hit = false;
+        Ray ray = new Ray(position, direction);
+        if (Physics.Raycast(ray, out info, distance, layermask))
+        {
+            hit = true;
+        }
+        if (hit)
+            col = Color.red;
+        Debug.DrawRay(position, direction, col);
+
+        return hit;
+    }
+
     void SetState(MovementState newState)
     {
         m_State = newState;
@@ -291,6 +406,11 @@ public class ControllerPlayer : MonoBehaviour
     void SetGravity(bool state)
     {
         m_Rigidbody.useGravity = state;
+    }
+
+    void SetKinematic(bool state)
+    {
+        m_Rigidbody.isKinematic = state;
     }
 
     public Vector3 GetVelocity()

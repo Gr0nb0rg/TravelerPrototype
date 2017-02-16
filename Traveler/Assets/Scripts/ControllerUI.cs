@@ -24,6 +24,9 @@ public class ControllerUI : MonoBehaviour
     //Pause vars
     bool m_IsPaused = false;
 
+    // EditorSettings
+    bool m_hideCursor = false;
+
     //Component vars
     ControllerPlayer m_Player;
     ControllerCamera m_Camera;
@@ -56,13 +59,19 @@ public class ControllerUI : MonoBehaviour
 
         if (GetIsPaused())
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            if (m_hideCursor)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            if (m_hideCursor)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 

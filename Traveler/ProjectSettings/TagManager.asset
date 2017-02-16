@@ -6,7 +6,11 @@ TagManager:
   tags:
   - LookAtTransform
   - Checkpoint
+  - ClimbWall
+  - ClimbLedge
+  - Interactable
   - Pillar
+  - Killbox
   layers:
   - Default
   - TransparentFX
@@ -19,7 +23,7 @@ TagManager:
   - Ground
   - Interactable
   - Player
-  - 
+  - Climbable
   - 
   - 
   - 
