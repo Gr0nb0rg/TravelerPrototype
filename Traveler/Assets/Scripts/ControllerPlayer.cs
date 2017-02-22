@@ -22,16 +22,25 @@ public class ControllerPlayer : MonoBehaviour
     }
 
     //Public vars
+    [Header("Current player state (read only)")]
     public MovementState m_State = MovementState.Idle;
-    public float m_MovementSpeed = 15.0f;
 
+    [Header("Movement variables")]
+    public float m_MovementSpeed = 15.0f;
     public float m_StrafeTopSpeed = 15.0f;
     public float m_ForwardTopSpeed = 20.0f;
     public float m_BackUpTopSpeed = 10.0f;
 
-    public float m_JumpForce = 15.0f;
+    [Header("Slope variables")]
     public float m_MaxAngle = 45.0f;
     public float m_SlopeSpeed = 25.0f;
+
+    [Header("Jump/air variables")]
+    public bool m_IsAirControl = false;
+    [Range(0.1f, 2f)]
+    public float m_AirMulti = 0.5f;
+    public float m_AirAcc = 5.0f;
+    public float m_JumpForce = 15.0f;
 
     //Component vars
     private Rigidbody m_Rigidbody;
@@ -119,16 +128,35 @@ public class ControllerPlayer : MonoBehaviour
             }
 
             //Set velocity relative to rotation
-            if (m_IsOnGround)
+            if (!m_IsAirControl)
             {
-
-                //Set velocity to input values if not sliding, else set to slopevelocity
-                if (!GetState().Equals(MovementState.Sliding))
+                if (m_IsOnGround)
                 {
-                    m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+                    //Set velocity to input values if not sliding, else set to slopevelocity
+                    if (!GetState().Equals(MovementState.Sliding))
+                    {
+                        m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+                    }
+                    else
+                        m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + (m_SlopeVelocity * m_SlopeSpeed), 3.0f * Time.deltaTime);
+                }
+            }
+            else
+            {
+                if (m_IsOnGround)
+                {
+                    //Set velocity to input values if not sliding, else set to slopevelocity
+                    if (!GetState().Equals(MovementState.Sliding))
+                    {
+                        m_Rigidbody.velocity = rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed);
+                    }
+                    else
+                        m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + (m_SlopeVelocity * m_SlopeSpeed), 3.0f * Time.deltaTime);
                 }
                 else
-                    m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 10, 0, 0) + (m_SlopeVelocity * m_SlopeSpeed), 3.0f * Time.deltaTime);
+                {
+                    m_Rigidbody.velocity = Vector3.Lerp(m_Rigidbody.velocity, rot * new Vector3(Input.GetAxisRaw("Horizontal") * 0.7f * m_MovementSpeed * m_AirMulti, m_Rigidbody.velocity.y, Input.GetAxisRaw("Vertical") * m_MovementSpeed * m_AirMulti), m_AirAcc * Time.deltaTime);
+                }
             }
 
             /*float dist = 1.3f;
