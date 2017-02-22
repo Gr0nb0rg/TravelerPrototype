@@ -34,6 +34,7 @@ public class ControllerLedgeClimbing : MonoBehaviour
     // Reference values
     private float m_playerHeight;
     private float m_playerWidth;
+    private Quaternion m_playerStartingRot;
 
     // Vault variables
     [SerializeField]
@@ -49,7 +50,7 @@ public class ControllerLedgeClimbing : MonoBehaviour
         m_playerHeight = m_collider.bounds.size.y;
         m_playerWidth = m_collider.bounds.size.x;
         m_playerController = GetComponent<ControllerPlayer>();
-        m_climbingIK = transform.Find("Ethan").GetComponent<ClimbingIK>();
+        m_climbingIK = GetComponentInChildren<ClimbingIK>();
         this.enabled = false;
     }
 
@@ -63,9 +64,9 @@ public class ControllerLedgeClimbing : MonoBehaviour
         if (initialTarget != null)
         {
             m_currentClimbTarget = initialTarget;
-            transform.position = m_currentClimbTarget.GetRootTarget().transform.position;
-            transform.rotation = m_currentClimbTarget.GetRootTarget().transform.rotation;
-
+            transform.position = m_currentClimbTarget.RootTarget.transform.position;
+            transform.rotation = m_currentClimbTarget.RootTarget.transform.rotation;
+            transform.parent = m_currentClimbTarget.transform;
             // Set IK Positions
             m_climbingIK.SetAllClimbTargets(m_currentClimbTarget);
             m_climbingIK.m_ikActive = true;
@@ -80,8 +81,8 @@ public class ControllerLedgeClimbing : MonoBehaviour
         // For editing root position in realtime
         if (m_updateRootEachFrame)
         {
-            transform.position = m_currentClimbTarget.GetRootTarget().transform.position;
-            transform.rotation = m_currentClimbTarget.GetRootTarget().transform.rotation;
+            transform.position = m_currentClimbTarget.RootTarget.transform.position;
+            transform.rotation = m_currentClimbTarget.RootTarget.transform.rotation;
         }
 
         // Find input direction
@@ -98,18 +99,21 @@ public class ControllerLedgeClimbing : MonoBehaviour
         // Move in direction
         if ((moveDirection != 0) && !m_inTransition)
         {
+            ClimbTarget newTarget = null;
             if (moveDirection == 1)
             {
-                MoveToTarget(m_currentClimbTarget.GetRightNeighbour());
+                if((newTarget = m_currentClimbTarget.RightNeigbour) != null)
+                    MoveToTarget(newTarget);
             }
             else
             {
-                MoveToTarget(m_currentClimbTarget.GetLeftNeighbour());
+                if ((newTarget = m_currentClimbTarget.LeftNeigbour) != null)
+                    MoveToTarget(newTarget);
             }
         }
 
         // Drop
-        if (Input.GetKey(KeyCode.S) && !m_inTransition)
+        if (Input.GetKeyDown(KeyCode.S) && !m_inTransition)
         {
             m_climbingIK.m_ikActive = false;
             // NOTE: Assumes climbTarget roots are only rotated in x
@@ -118,7 +122,7 @@ public class ControllerLedgeClimbing : MonoBehaviour
         }
 
         // Vault
-        if (Input.GetKey(KeyCode.Space) && !m_inTransition)
+        if (Input.GetKeyDown(KeyCode.Space) && !m_inTransition)
         {
             if (CanVault())
             {
@@ -235,8 +239,9 @@ public class ControllerLedgeClimbing : MonoBehaviour
         yield return new WaitForSeconds(m_transitionDuration);
         m_currentClimbTarget = newTarget;
         m_climbingIK.SetAllClimbTargets(m_currentClimbTarget);
-        transform.position = m_currentClimbTarget.GetRootTarget().transform.position;
-        transform.rotation = m_currentClimbTarget.GetRootTarget().transform.rotation;
+        transform.position = m_currentClimbTarget.RootTarget.transform.position;
+        transform.rotation = m_currentClimbTarget.RootTarget.transform.rotation;
+        transform.parent = newTarget.transform;
 
         m_inTransition = false;
         // Move half limbs fully in direction

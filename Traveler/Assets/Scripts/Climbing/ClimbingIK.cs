@@ -41,11 +41,13 @@ public class ClimbingIK : MonoBehaviour {
         m_animator = GetComponent<Animator>();
     }
 
-    //a callback for calculating IK
+    // Callback for calculating IK
     void OnAnimatorIK()
     {
+
         if (m_animator)
         {
+
             //if the IK is active, set the position and rotation directly to the goal. 
             if (m_ikActive)
             {
@@ -111,36 +113,35 @@ public class ClimbingIK : MonoBehaviour {
 
     public void SetLeftClimbTargets(ClimbTarget newTarget)
     {
-        m_leftHandTarget = newTarget.GetLeftHandTarget();
-        m_leftFootTarget = newTarget.GetLeftFootTarget();
-        m_leftArmHint = newTarget.GetLeftArmHint();
-        m_leftLegHint = newTarget.GetLeftLegHint();
-        m_root.position = (m_root.transform.position + newTarget.GetRootTarget().position) / 2;
-        m_root.rotation = newTarget.GetRootTarget().rotation;
+        m_leftHandTarget = newTarget.LeftHandTarget;
+        m_leftFootTarget = newTarget.LeftFootTarget;
+        m_leftArmHint = newTarget.LeftArmHint;
+        m_leftLegHint = newTarget.LeftLegHint;
+        m_root.position = (m_root.transform.position + newTarget.RootTarget.position) / 2;
+        m_root.rotation = newTarget.RootTarget.rotation;
     }
 
     public void SetRightClimbTargets(ClimbTarget newTarget)
     {
-        m_rightHandTarget = newTarget.GetRightHandTarget();
-        m_rightFootTarget = newTarget.GetRightFootTarget();
-        m_rightArmHint = newTarget.GetRightArmHint();
-        m_rightLegHint = newTarget.GetRightLegHint();
-        m_root.position = (m_root.transform.position + newTarget.GetRootTarget().position) / 2;
-        m_root.rotation = newTarget.GetRootTarget().rotation;
-
+        m_rightHandTarget = newTarget.RightHandTarget;
+        m_rightFootTarget = newTarget.RightFootTarget;
+        m_rightArmHint = newTarget.RightArmHint;
+        m_rightLegHint = newTarget.RightLegHint;
+        m_root.position = (m_root.transform.position + newTarget.RootTarget.position) / 2;
+        m_root.rotation = newTarget.RootTarget.rotation;
     }
 
     public void SetAllClimbTargets(ClimbTarget newTarget)
     {
-        m_rightHandTarget = newTarget.GetRightHandTarget();
-        m_leftHandTarget = newTarget.GetLeftHandTarget();
-        m_rightFootTarget = newTarget.GetRightFootTarget();
-        m_leftFootTarget = newTarget.GetLeftFootTarget();
-        m_rightArmHint = newTarget.GetRightArmHint();
-        m_leftArmHint = newTarget.GetLeftArmHint();
-        m_rightLegHint = newTarget.GetRightLegHint();
-        m_leftLegHint = newTarget.GetLeftLegHint();
-        m_root = newTarget.GetRootTarget();
+        m_rightHandTarget = newTarget.RightHandTarget;
+        m_leftHandTarget = newTarget.LeftHandTarget;
+        m_rightFootTarget = newTarget.RightFootTarget;
+        m_leftFootTarget = newTarget.LeftFootTarget;
+        m_rightArmHint = newTarget.RightArmHint;
+        m_leftArmHint = newTarget.LeftArmHint;
+        m_rightLegHint = newTarget.RightLegHint;
+        m_leftLegHint = newTarget.LeftLegHint;
+        m_root = newTarget.RootTarget;
     }
 
     public void SetHintPosIK(AvatarIKHint hint, Vector3 targetPos, float weight)

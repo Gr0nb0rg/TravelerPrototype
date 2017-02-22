@@ -6,7 +6,7 @@ using UnityEngine;
     Author: Ludvig Grönborg
     Email: ludviggronborg@hotmail.com
     Phone: 0730654281 
-    Last Edited: 2017/02/10
+    Last Edited: 2017/02/21
 */
 
 /*
@@ -43,8 +43,11 @@ public class BasicPillar : AbstractInteractable {
 
     public override void Interact()
     {
-        if (!m_pillarInMotion)
-            StartCoroutine(ConstantExtension());
+        if (!m_alwaysActive)
+        {
+            if (!m_pillarInMotion)
+                StartCoroutine(ConstantExtension());
+        }
     }
 
     // Constant Translation

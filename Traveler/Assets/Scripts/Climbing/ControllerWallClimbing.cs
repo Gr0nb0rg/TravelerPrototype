@@ -6,7 +6,7 @@ using UnityEngine;
     Author: Ludvig Grönborg
     Email: ludviggronborg@hotmail.com
     Phone: 0730654281
-    Last Edited: 2017/02/04
+    Last Edited: 2017/02/21
 */
 
 /*
@@ -14,7 +14,8 @@ using UnityEngine;
     Handles alternative navigation that lets player move around on a flat wall according to input
     Drops player from wall when space is pressed
 */
-
+[RequireComponent(typeof(ControllerPlayer))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class ControllerWallClimbing : MonoBehaviour {
 
     // PRIVATE SERALIZABLES
@@ -37,7 +38,7 @@ public class ControllerWallClimbing : MonoBehaviour {
 
     // Component variables
     private ControllerPlayer m_playerController;
-    private CapsuleCollider m_playerCollider;
+    //private CapsuleCollider m_playerCollider;
 
     // Reference values
     private float m_playerHeight;
@@ -50,9 +51,9 @@ public class ControllerWallClimbing : MonoBehaviour {
     void Start()
     {
         m_playerController = GetComponent<ControllerPlayer>();
-        m_playerCollider = GetComponent<CapsuleCollider>();
-        m_playerWidth = m_playerCollider.bounds.size.x;
-        m_playerHeight = m_playerCollider.bounds.size.y;
+        CapsuleCollider playerCollider = GetComponent<CapsuleCollider>();
+        m_playerWidth = playerCollider.bounds.size.x;
+        m_playerHeight = playerCollider.bounds.size.y;
     }
 
     void Update()
@@ -216,4 +217,6 @@ public class ControllerWallClimbing : MonoBehaviour {
         }
         return retVal;
     }
+
+    public float DistanceFromWall { get { return m_distFromWall; } }
 }
