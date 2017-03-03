@@ -300,7 +300,6 @@ public class ControllerPlayer : MonoBehaviour
                 Physics.Linecast(m_climbRaycheckL.position, endpointL, out hitL, m_climbCheckLayers))
             {
                 // Did both hit ledge trigger?
-                print("L IS: " + hitL.collider.gameObject.tag + " R IS: " + hitL.collider.gameObject.tag);
                 if (hitL.collider.gameObject.tag.Equals("ClimbLedge") && hitR.collider.gameObject.tag.Equals("ClimbLedge"))
                 {
                     // Switch to

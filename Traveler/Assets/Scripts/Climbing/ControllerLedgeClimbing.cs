@@ -18,9 +18,6 @@ using UnityEngine;
 
 public class ControllerLedgeClimbing : MonoBehaviour
 {
-    // Editor options
-    [SerializeField]
-    private bool m_updateRootEachFrame = false; // For editor purposes only
     // Time it takes to reach a new point
     [SerializeField]
     private float m_transitionDuration = 0.4f;
@@ -69,24 +66,14 @@ public class ControllerLedgeClimbing : MonoBehaviour
             transform.parent = m_currentClimbTarget.transform;
             // Set IK Positions
             m_climbingIK.SetAllClimbTargets(m_currentClimbTarget);
-            m_climbingIK.m_ikActive = true;
+            m_climbingIK.IK_Active = true;
         }
     }
 
     public void UpdateMovement()
     {
-        //m_currentClimbTarget.GetLeftNeighbour();
-        //m_currentClimbTarget.GetRightNeighbour();
-
-        // For editing root position in realtime
-        if (m_updateRootEachFrame)
-        {
-            transform.position = m_currentClimbTarget.RootTarget.transform.position;
-            transform.rotation = m_currentClimbTarget.RootTarget.transform.rotation;
-        }
-
         // Find input direction
-        float moveDirection = 0;
+        int moveDirection = 0;
         if (Input.GetKey(KeyCode.D))
         {
             moveDirection += 1;
@@ -102,22 +89,22 @@ public class ControllerLedgeClimbing : MonoBehaviour
             ClimbTarget newTarget = null;
             if (moveDirection == 1)
             {
-                if((newTarget = m_currentClimbTarget.RightNeigbour) != null)
-                    MoveToTarget(newTarget);
+                if ((newTarget = m_currentClimbTarget.RightNeigbour) != null)
+                    StartCoroutine(Move(newTarget, moveDirection));
             }
             else
             {
                 if ((newTarget = m_currentClimbTarget.LeftNeigbour) != null)
-                    MoveToTarget(newTarget);
+                    StartCoroutine(Move(newTarget, moveDirection));
             }
         }
 
         // Drop
-        if (Input.GetKeyDown(KeyCode.S) && !m_inTransition)
+        if (Input.GetKey(KeyCode.S) && !m_inTransition)
         {
-            m_climbingIK.m_ikActive = false;
+            m_climbingIK.IK_Active = false;
             // NOTE: Assumes climbTarget roots are only rotated in x
-            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
             m_playerController.DeactivateLedgeClimbing();
         }
 
@@ -208,9 +195,9 @@ public class ControllerLedgeClimbing : MonoBehaviour
     private void Vault()
     {
         // NOTE: Assumes climbTarget roots are only rotated in x
-        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         transform.position = m_vaultpos;
-        m_climbingIK.m_ikActive = false;
+        m_climbingIK.IK_Active = false;
         m_playerController.DeactivateLedgeClimbing();
     }
 
@@ -221,84 +208,34 @@ public class ControllerLedgeClimbing : MonoBehaviour
         //StopCoroutine(MoveAnimation());
     }
 
-    private void MoveToTarget(ClimbTarget newTarget)
-    {
-        print("MoveToTarget");
-        StartCoroutine(Move(newTarget));
-        //MoveRightAnimation(newTarget);
-
-        //m_currentClimbTarget = newTarget;
-        //m_climbingIK.SetAllClimbTargets(m_currentClimbTarget);
-        //transform.position = m_currentClimbTarget.GetRootTarget().transform.position;
-    }
-
-    IEnumerator Move(ClimbTarget newTarget)
+    IEnumerator Move(ClimbTarget newTarget, int direction)
     {
         m_inTransition = true;
+        // Start animation
+        if (direction == 1)
+        {
+            //transform.position = transform.position + (newTarget.RootTarget.transform.position - transform.position).normalized *0.5f;
+            yield return m_climbingIK.MoveRightAnimation(newTarget);
+        }
+        else if (direction == -1)
+        {
+            yield return m_climbingIK.MoveLeftAnimation(newTarget);
+        }
 
-        yield return new WaitForSeconds(m_transitionDuration);
+        // Wait for animation to finish
+        while (m_inTransition) {
+
+            yield return null;
+        }
+
+        // Animation is done, updates to new target
         m_currentClimbTarget = newTarget;
-        m_climbingIK.SetAllClimbTargets(m_currentClimbTarget);
-        transform.position = m_currentClimbTarget.RootTarget.transform.position;
-        transform.rotation = m_currentClimbTarget.RootTarget.transform.rotation;
         transform.parent = newTarget.transform;
 
-        m_inTransition = false;
-        // Move half limbs fully in direction
-        // Move root halfway
-        // Move other half fully in direction
-
+        print("Done");
     }
 
-    //IEnumerator MoveLeftAnimation()
-    //{
-    //    m_climbingIK.set
-    //    // Move half limbs fully in direction
-    //    // Move root halfway
-    //    // Move other half fully in direction
-
-    //}
-
-    //IEnumerator MoveLeftAnimation()
-    //{
-    //    m_climbingIK.set
-    //    // Move half limbs fully in direction
-    //    // Move root halfway
-    //    // Move other half fully in direction
-
-    //}
-
-    //IEnumerator StepRight(ClimbTarget newTarget)
-    //{
-    //    StartCoroutine(LerpFloat(1.0f, 0.5f, m_climbingIK.m_rightIkWeight, m_transitionDuration));
-    //}
-
-    //IEnumerator MoveRightAnimation(ClimbTarget newTarget)
-    //{
-    //    m_inTransition = true;
-
-    //    // Move right side
-    //    yield return LerpFloat(1.0f, 0.5f, m_climbingIK.m_rightIkWeight, m_transitionDuration);
-    //    m_climbingIK.SetRightClimbTargets(newTarget);
-    //    yield return LerpFloat(0.5f, 1.0f, m_climbingIK.m_rightIkWeight, m_transitionDuration);
-
-    //    // Move left side
-    //    yield return LerpFloat(1.0f, 0.5f, m_climbingIK.m_leftIkWeight, m_transitionDuration);
-    //    m_climbingIK.SetLeftClimbTargets(newTarget);
-    //    yield return LerpFloat(0.5f, 1.0f, m_climbingIK.m_leftIkWeight, m_transitionDuration);
-
-    //    m_inTransition = false;
-    //}
-
-    //IEnumerator LerpFloat(float from, float to, float value, float duration)
-    //{
-    //    for (float t = 0.0f; t < duration; t += Time.deltaTime)
-    //    {
-    //        value = Mathf.Lerp(from, to, t / duration);
-    //        yield return null;
-    //    }
-    //    value = to;
-    //}
+    public bool InTransition { get { return m_inTransition; } set { m_inTransition = value; } }
 
     // Regular Climbing State
     // Climb from side to side

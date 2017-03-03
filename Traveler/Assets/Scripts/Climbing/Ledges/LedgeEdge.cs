@@ -75,7 +75,7 @@ public class LedgeEdge : MonoBehaviour
         {
             for (int i = 0; i < targetDelta; i++)
             {
-                if (!CreateClimbTarget(TargetType.MID))
+                if (!CreateClimbTarget())
                     Debug.Log("CouldNotPlaceTarget");
             }
         }
@@ -125,28 +125,13 @@ public class LedgeEdge : MonoBehaviour
         }
     }
 
-    public bool CreateClimbTarget(TargetType type)
+    public bool CreateClimbTarget()
     {
-        GameObject instance = null;
-        // Rot = transform.rot * facingDirection
-        switch (type)
-        {
-            case TargetType.CORNER:
-                instance = Instantiate(Resources.Load("ClimbTargetCorner", typeof(GameObject))) as GameObject;
-                instance.transform.parent = transform;
-                instance.transform.position = transform.position;
-                instance.transform.rotation = transform.rotation;
-                //instance.transform.LookAt(instance.transform.position);
-                break;
-            case TargetType.MID:
-                instance = Instantiate(Resources.Load("ClimbTargetMid", typeof(GameObject))) as GameObject;
-                instance.transform.parent = transform;
-                instance.transform.position = transform.position;
-                instance.transform.rotation = transform.rotation;
-                break;
-            default:
-                break;
-        }
+        GameObject instance = Instantiate(Resources.Load("ClimbTargetMid", typeof(GameObject))) as GameObject;
+        instance.transform.parent = transform;
+        instance.transform.position = transform.position;
+        instance.transform.rotation = transform.rotation;
+
         if(instance != null)
         {
             instance.name = "ClimbTarget " + (m_targets.Count + 1);

@@ -1,0 +1,927 @@
+fileFormatVersion: 2
+guid: 70d97ade614aa144198f92d56b5f5e6b
+timeCreated: 1487800694
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Chest
+    100002: crtl_fk_thigh_lft
+    100004: crtl_fk_thigh_rt
+    100006: ctrl_chest
+    100008: ctrl_elbow_fk_lft
+    100010: ctrl_elbow_fk_rt
+    100012: ctrl_fk_ankle_lft
+    100014: ctrl_fk_ankle_rt
+    100016: ctrl_fk_knee_lft
+    100018: ctrl_fk_knee_rt
+    100020: ctrl_global
+    100022: ctrl_hand_ik_lft
+    100024: ctrl_hand_ik_rt
+    100026: ctrl_head
+    100028: ctrl_hip
+    100030: ctrl_ik_elbow_lft
+    100032: ctrl_ik_elbow_rt
+    100034: ctrl_knee_lft
+    100036: ctrl_knee_rt
+    100038: ctrl_leg_lft
+    100040: ctrl_leg_rt
+    100042: ctrl_neck
+    100044: ctrl_shlda_fk_lft
+    100046: ctrl_shlda_fk_rt
+    100048: ctrl_spine_mid
+    100050: ctrl_wrist__fk_lft
+    100052: ctrl_wrist__fk_rt
+    100054: ctrl_xtra_leg_lft
+    100056: ctrl_xtra_leg_rt
+    100058: eye_base_lft
+    100060: eye_base_rt
+    100062: eye_cover_lft
+    100064: eye_cover_rt
+    100066: eye_lense_lft
+    100068: eye_lense_rt
+    100070: eye_lft
+    100072: eye_rt
+    100074: Fing_1a_L1
+    100076: Fing_1a_L1 1
+    100078: Fing_1b_L1
+    100080: Fing_1b_L1 1
+    100082: Fing_1c_L1
+    100084: Fing_1c_L1 1
+    100086: Fing_2a_L1
+    100088: Fing_2a_L1 1
+    100090: Fing_2b_L1
+    100092: Fing_2b_L1 1
+    100094: Fing_2c_L1
+    100096: Fing_2c_L1 1
+    100098: Fing_3a_L1
+    100100: Fing_3a_L1 1
+    100102: Fing_3b_L1
+    100104: Fing_3b_L1 1
+    100106: Fing_3c_L1
+    100108: Fing_3c_L1 1
+    100110: Fing_4a_L1
+    100112: Fing_4a_L1 1
+    100114: Fing_4b_L1
+    100116: Fing_4b_L1 1
+    100118: Fing_4c_L1
+    100120: Fing_4c_L1 1
+    100122: hand_attrbts_lft
+    100124: hand_attrbts_rt
+    100126: Hand_left
+    100128: Hand_right
+    100130: Head
+    100132: Hips
+    100134: ik_heel_lift_lft
+    100136: ik_heel_lift_rt
+    100138: ik_tip_toe_lft
+    100140: ik_tip_toe_rt
+    100142: ik_toe_tap_lft
+    100144: ik_toe_tap_rt
+    100146: ikHandle1
+    100148: ikHandle2
+    100150: ikHandle3
+    100152: ikHandle4
+    100154: ikHandle5
+    100156: ikHandle6
+    100158: ikHandle7
+    100160: ikHandle8
+    100162: jt_ankle_lft
+    100164: jt_ankle_rt
+    100166: jt_ball_lft
+    100168: jt_ball_rt
+    100170: jt_chest
+    100172: jt_elbow_lft
+    100174: jt_elbow_rt
+    100176: jt_head
+    100178: jt_head_tip
+    100180: jt_index_lft_1
+    100182: jt_index_lft_2
+    100184: jt_index_lft_3
+    100186: jt_index_lft_4
+    100188: jt_index_rt_1
+    100190: jt_index_rt_2
+    100192: jt_index_rt_3
+    100194: jt_index_rt_4
+    100196: jt_middle_lft_1
+    100198: jt_middle_lft_2
+    100200: jt_middle_lft_3
+    100202: jt_middle_lft_4
+    100204: jt_middle_rt_1
+    100206: jt_middle_rt_2
+    100208: jt_middle_rt_3
+    100210: jt_middle_rt_4
+    100212: jt_neck
+    100214: jt_pinky_lft_1
+    100216: jt_pinky_lft_2
+    100218: jt_pinky_lft_3
+    100220: jt_pinky_lft_4
+    100222: jt_pinky_rt_1
+    100224: jt_pinky_rt_2
+    100226: jt_pinky_rt_3
+    100228: jt_pinky_rt_4
+    100230: jt_ring_lft_1
+    100232: jt_ring_lft_2
+    100234: jt_ring_lft_3
+    100236: jt_ring_lft_4
+    100238: jt_ring_rt_1
+    100240: jt_ring_rt_2
+    100242: jt_ring_rt_3
+    100244: jt_ring_rt_4
+    100246: jt_root
+    100248: jt_sheen_lft
+    100250: jt_sheen_rt
+    100252: jt_shoulder_lft
+    100254: jt_shoulder_rt
+    100256: jt_spine_mid
+    100258: jt_thigh_lft
+    100260: jt_thigh_rt
+    100262: jt_thumb_lft_1
+    100264: jt_thumb_lft_2
+    100266: jt_thumb_lft_3
+    100268: jt_thumb_lft_4
+    100270: jt_thumb_rt_1
+    100272: jt_thumb_rt_2
+    100274: jt_thumb_rt_3
+    100276: jt_thumb_rt_4
+    100278: jt_toe_tip_lft
+    100280: jt_toe_tip_rt
+    100282: jt_wrist_lft
+    100284: jt_wrist_rt
+    100286: Ldelt
+    100288: Leg_left
+    100290: Leg_right
+    100292: Lelbow
+    100294: Lfoot
+    100296: Lfoot 1
+    100298: Lhand_Hero1
+    100300: Lhand_Hero1 1
+    100302: Lknee
+    100304: Lknee 1
+    100306: LlArm
+    100308: LlLeg
+    100310: LlLeg 1
+    100312: Ltoes
+    100314: Ltoes 1
+    100316: LuArm
+    100318: LuLeg
+    100320: LuLeg 1
+    100322: Neck
+    100324: Rdelt
+    100326: Relbow
+    100328: Ribs
+    100330: RlArm
+    100332: ROBO_GEO
+    100334: RuArm
+    100336: //RootNode
+    100338: T1_L1
+    100340: T1_L1 1
+    100342: T2_L1
+    100344: T2_L1 1
+    100346: T3_L1
+    100348: T3_L1 1
+    100350: Waist
+    400000: Chest
+    400002: crtl_fk_thigh_lft
+    400004: crtl_fk_thigh_rt
+    400006: ctrl_chest
+    400008: ctrl_elbow_fk_lft
+    400010: ctrl_elbow_fk_rt
+    400012: ctrl_fk_ankle_lft
+    400014: ctrl_fk_ankle_rt
+    400016: ctrl_fk_knee_lft
+    400018: ctrl_fk_knee_rt
+    400020: ctrl_global
+    400022: ctrl_hand_ik_lft
+    400024: ctrl_hand_ik_rt
+    400026: ctrl_head
+    400028: ctrl_hip
+    400030: ctrl_ik_elbow_lft
+    400032: ctrl_ik_elbow_rt
+    400034: ctrl_knee_lft
+    400036: ctrl_knee_rt
+    400038: ctrl_leg_lft
+    400040: ctrl_leg_rt
+    400042: ctrl_neck
+    400044: ctrl_shlda_fk_lft
+    400046: ctrl_shlda_fk_rt
+    400048: ctrl_spine_mid
+    400050: ctrl_wrist__fk_lft
+    400052: ctrl_wrist__fk_rt
+    400054: ctrl_xtra_leg_lft
+    400056: ctrl_xtra_leg_rt
+    400058: eye_base_lft
+    400060: eye_base_rt
+    400062: eye_cover_lft
+    400064: eye_cover_rt
+    400066: eye_lense_lft
+    400068: eye_lense_rt
+    400070: eye_lft
+    400072: eye_rt
+    400074: Fing_1a_L1
+    400076: Fing_1a_L1 1
+    400078: Fing_1b_L1
+    400080: Fing_1b_L1 1
+    400082: Fing_1c_L1
+    400084: Fing_1c_L1 1
+    400086: Fing_2a_L1
+    400088: Fing_2a_L1 1
+    400090: Fing_2b_L1
+    400092: Fing_2b_L1 1
+    400094: Fing_2c_L1
+    400096: Fing_2c_L1 1
+    400098: Fing_3a_L1
+    400100: Fing_3a_L1 1
+    400102: Fing_3b_L1
+    400104: Fing_3b_L1 1
+    400106: Fing_3c_L1
+    400108: Fing_3c_L1 1
+    400110: Fing_4a_L1
+    400112: Fing_4a_L1 1
+    400114: Fing_4b_L1
+    400116: Fing_4b_L1 1
+    400118: Fing_4c_L1
+    400120: Fing_4c_L1 1
+    400122: hand_attrbts_lft
+    400124: hand_attrbts_rt
+    400126: Hand_left
+    400128: Hand_right
+    400130: Head
+    400132: Hips
+    400134: ik_heel_lift_lft
+    400136: ik_heel_lift_rt
+    400138: ik_tip_toe_lft
+    400140: ik_tip_toe_rt
+    400142: ik_toe_tap_lft
+    400144: ik_toe_tap_rt
+    400146: ikHandle1
+    400148: ikHandle2
+    400150: ikHandle3
+    400152: ikHandle4
+    400154: ikHandle5
+    400156: ikHandle6
+    400158: ikHandle7
+    400160: ikHandle8
+    400162: jt_ankle_lft
+    400164: jt_ankle_rt
+    400166: jt_ball_lft
+    400168: jt_ball_rt
+    400170: jt_chest
+    400172: jt_elbow_lft
+    400174: jt_elbow_rt
+    400176: jt_head
+    400178: jt_head_tip
+    400180: jt_index_lft_1
+    400182: jt_index_lft_2
+    400184: jt_index_lft_3
+    400186: jt_index_lft_4
+    400188: jt_index_rt_1
+    400190: jt_index_rt_2
+    400192: jt_index_rt_3
+    400194: jt_index_rt_4
+    400196: jt_middle_lft_1
+    400198: jt_middle_lft_2
+    400200: jt_middle_lft_3
+    400202: jt_middle_lft_4
+    400204: jt_middle_rt_1
+    400206: jt_middle_rt_2
+    400208: jt_middle_rt_3
+    400210: jt_middle_rt_4
+    400212: jt_neck
+    400214: jt_pinky_lft_1
+    400216: jt_pinky_lft_2
+    400218: jt_pinky_lft_3
+    400220: jt_pinky_lft_4
+    400222: jt_pinky_rt_1
+    400224: jt_pinky_rt_2
+    400226: jt_pinky_rt_3
+    400228: jt_pinky_rt_4
+    400230: jt_ring_lft_1
+    400232: jt_ring_lft_2
+    400234: jt_ring_lft_3
+    400236: jt_ring_lft_4
+    400238: jt_ring_rt_1
+    400240: jt_ring_rt_2
+    400242: jt_ring_rt_3
+    400244: jt_ring_rt_4
+    400246: jt_root
+    400248: jt_sheen_lft
+    400250: jt_sheen_rt
+    400252: jt_shoulder_lft
+    400254: jt_shoulder_rt
+    400256: jt_spine_mid
+    400258: jt_thigh_lft
+    400260: jt_thigh_rt
+    400262: jt_thumb_lft_1
+    400264: jt_thumb_lft_2
+    400266: jt_thumb_lft_3
+    400268: jt_thumb_lft_4
+    400270: jt_thumb_rt_1
+    400272: jt_thumb_rt_2
+    400274: jt_thumb_rt_3
+    400276: jt_thumb_rt_4
+    400278: jt_toe_tip_lft
+    400280: jt_toe_tip_rt
+    400282: jt_wrist_lft
+    400284: jt_wrist_rt
+    400286: Ldelt
+    400288: Leg_left
+    400290: Leg_right
+    400292: Lelbow
+    400294: Lfoot
+    400296: Lfoot 1
+    400298: Lhand_Hero1
+    400300: Lhand_Hero1 1
+    400302: Lknee
+    400304: Lknee 1
+    400306: LlArm
+    400308: LlLeg
+    400310: LlLeg 1
+    400312: Ltoes
+    400314: Ltoes 1
+    400316: LuArm
+    400318: LuLeg
+    400320: LuLeg 1
+    400322: Neck
+    400324: Rdelt
+    400326: Relbow
+    400328: Ribs
+    400330: RlArm
+    400332: ROBO_GEO
+    400334: RuArm
+    400336: //RootNode
+    400338: T1_L1
+    400340: T1_L1 1
+    400342: T2_L1
+    400344: T2_L1 1
+    400346: T3_L1
+    400348: T3_L1 1
+    400350: Waist
+    4300000: RlArm
+    4300002: Rdelt
+    4300004: Relbow
+    4300006: RuArm
+    4300008: LlArm
+    4300010: Ldelt
+    4300012: Lelbow
+    4300014: LuArm
+    4300016: Neck
+    4300018: eye_cover_rt
+    4300020: eye_lense_rt
+    4300022: eye_cover_lft
+    4300024: eye_lense_lft
+    4300026: Chest
+    4300028: Ribs
+    4300030: Waist
+    4300032: Hips
+    4300034: Fing_1a_L1
+    4300036: Fing_1b_L1
+    4300038: Fing_1c_L1
+    4300040: Fing_2a_L1
+    4300042: Fing_2b_L1
+    4300044: Fing_2c_L1
+    4300046: Fing_3a_L1
+    4300048: Fing_3b_L1
+    4300050: Fing_3c_L1
+    4300052: Fing_4a_L1
+    4300054: Fing_4b_L1
+    4300056: Fing_4c_L1
+    4300058: T1_L1
+    4300060: T2_L1
+    4300062: T3_L1
+    4300064: Lhand_Hero1
+    4300066: Fing_1a_L1
+    4300068: Fing_1b_L1
+    4300070: Fing_1c_L1
+    4300072: Fing_2a_L1
+    4300074: Fing_2b_L1
+    4300076: Fing_2c_L1
+    4300078: Fing_3a_L1
+    4300080: Fing_3b_L1
+    4300082: Fing_3c_L1
+    4300084: Fing_4a_L1
+    4300086: Fing_4b_L1
+    4300088: Fing_4c_L1
+    4300090: T1_L1
+    4300092: T2_L1
+    4300094: T3_L1
+    4300096: Lhand_Hero1
+    4300098: Ltoes
+    4300100: Lfoot
+    4300102: LlLeg
+    4300104: Lknee
+    4300106: LuLeg
+    4300108: Ltoes
+    4300110: Lfoot
+    4300112: LlLeg
+    4300114: Lknee
+    4300116: LuLeg
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Chest
+    13700002: eye_cover_lft
+    13700004: eye_cover_rt
+    13700006: eye_lense_lft
+    13700008: eye_lense_rt
+    13700010: Fing_1a_L1
+    13700012: Fing_1a_L1 1
+    13700014: Fing_1b_L1
+    13700016: Fing_1b_L1 1
+    13700018: Fing_1c_L1
+    13700020: Fing_1c_L1 1
+    13700022: Fing_2a_L1
+    13700024: Fing_2a_L1 1
+    13700026: Fing_2b_L1
+    13700028: Fing_2b_L1 1
+    13700030: Fing_2c_L1
+    13700032: Fing_2c_L1 1
+    13700034: Fing_3a_L1
+    13700036: Fing_3a_L1 1
+    13700038: Fing_3b_L1
+    13700040: Fing_3b_L1 1
+    13700042: Fing_3c_L1
+    13700044: Fing_3c_L1 1
+    13700046: Fing_4a_L1
+    13700048: Fing_4a_L1 1
+    13700050: Fing_4b_L1
+    13700052: Fing_4b_L1 1
+    13700054: Fing_4c_L1
+    13700056: Fing_4c_L1 1
+    13700058: Hips
+    13700060: Ldelt
+    13700062: Lelbow
+    13700064: Lfoot
+    13700066: Lfoot 1
+    13700068: Lhand_Hero1
+    13700070: Lhand_Hero1 1
+    13700072: Lknee
+    13700074: Lknee 1
+    13700076: LlArm
+    13700078: LlLeg
+    13700080: LlLeg 1
+    13700082: Ltoes
+    13700084: Ltoes 1
+    13700086: LuArm
+    13700088: LuLeg
+    13700090: LuLeg 1
+    13700092: Neck
+    13700094: Rdelt
+    13700096: Relbow
+    13700098: Ribs
+    13700100: RlArm
+    13700102: RuArm
+    13700104: T1_L1
+    13700106: T1_L1 1
+    13700108: T2_L1
+    13700110: T2_L1 1
+    13700112: T3_L1
+    13700114: T3_L1 1
+    13700116: Waist
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 32
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: ctrl_global
+        weight: 1
+      - path: ctrl_global/ctrl_hand_ik_lft
+        weight: 1
+      - path: ctrl_global/ctrl_hand_ik_lft/ikHandle7
+        weight: 1
+      - path: ctrl_global/ctrl_hand_ik_rt
+        weight: 1
+      - path: ctrl_global/ctrl_hand_ik_rt/ikHandle8
+        weight: 1
+      - path: ctrl_global/ctrl_hip
+        weight: 1
+      - path: ctrl_global/ctrl_hip/crtl_fk_thigh_lft
+        weight: 1
+      - path: ctrl_global/ctrl_hip/crtl_fk_thigh_lft/ctrl_fk_knee_lft
+        weight: 1
+      - path: ctrl_global/ctrl_hip/crtl_fk_thigh_lft/ctrl_fk_knee_lft/ctrl_fk_ankle_lft
+        weight: 1
+      - path: ctrl_global/ctrl_hip/crtl_fk_thigh_rt
+        weight: 1
+      - path: ctrl_global/ctrl_hip/crtl_fk_thigh_rt/ctrl_fk_knee_rt
+        weight: 1
+      - path: ctrl_global/ctrl_hip/crtl_fk_thigh_rt/ctrl_fk_knee_rt/ctrl_fk_ankle_rt
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_ik_elbow_lft
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_ik_elbow_rt
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_neck
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_neck/ctrl_head
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_shlda_fk_lft
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_shlda_fk_lft/ctrl_elbow_fk_lft
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_shlda_fk_lft/ctrl_elbow_fk_lft/ctrl_wrist__fk_lft
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_shlda_fk_rt
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_shlda_fk_rt/ctrl_elbow_fk_rt
+        weight: 1
+      - path: ctrl_global/ctrl_hip/ctrl_spine_mid/ctrl_chest/ctrl_shlda_fk_rt/ctrl_elbow_fk_rt/ctrl_wrist__fk_rt
+        weight: 1
+      - path: ctrl_global/ctrl_leg_lft
+        weight: 1
+      - path: ctrl_global/ctrl_leg_lft/ctrl_knee_lft
+        weight: 1
+      - path: ctrl_global/ctrl_leg_lft/ik_tip_toe_lft
+        weight: 1
+      - path: ctrl_global/ctrl_leg_lft/ik_tip_toe_lft/ik_heel_lift_lft
+        weight: 1
+      - path: ctrl_global/ctrl_leg_lft/ik_tip_toe_lft/ik_heel_lift_lft/ikHandle1
+        weight: 1
+      - path: ctrl_global/ctrl_leg_lft/ik_tip_toe_lft/ik_heel_lift_lft/ikHandle2
+        weight: 1
+      - path: ctrl_global/ctrl_leg_lft/ik_tip_toe_lft/ik_toe_tap_lft
+        weight: 1
+      - path: ctrl_global/ctrl_leg_lft/ik_tip_toe_lft/ik_toe_tap_lft/ikHandle3
+        weight: 1
+      - path: ctrl_global/ctrl_leg_rt
+        weight: 1
+      - path: ctrl_global/ctrl_leg_rt/ctrl_knee_rt
+        weight: 1
+      - path: ctrl_global/ctrl_leg_rt/ik_tip_toe_rt
+        weight: 1
+      - path: ctrl_global/ctrl_leg_rt/ik_tip_toe_rt/ik_heel_lift_rt
+        weight: 1
+      - path: ctrl_global/ctrl_leg_rt/ik_tip_toe_rt/ik_heel_lift_rt/ikHandle4
+        weight: 1
+      - path: ctrl_global/ctrl_leg_rt/ik_tip_toe_rt/ik_heel_lift_rt/ikHandle5
+        weight: 1
+      - path: ctrl_global/ctrl_leg_rt/ik_tip_toe_rt/ik_toe_tap_rt
+        weight: 1
+      - path: ctrl_global/ctrl_leg_rt/ik_tip_toe_rt/ik_toe_tap_rt/ikHandle6
+        weight: 1
+      - path: ctrl_global/jt_root
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_neck
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_neck/jt_head
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_neck/jt_head/jt_head_tip
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/hand_attrbts_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_index_lft_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_index_lft_1/jt_index_lft_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_index_lft_1/jt_index_lft_2/jt_index_lft_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_index_lft_1/jt_index_lft_2/jt_index_lft_3/jt_index_lft_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_middle_lft_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_middle_lft_1/jt_middle_lft_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_middle_lft_1/jt_middle_lft_2/jt_middle_lft_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_middle_lft_1/jt_middle_lft_2/jt_middle_lft_3/jt_middle_lft_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_pinky_lft_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_pinky_lft_1/jt_pinky_lft_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_pinky_lft_1/jt_pinky_lft_2/jt_pinky_lft_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_pinky_lft_1/jt_pinky_lft_2/jt_pinky_lft_3/jt_pinky_lft_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_ring_lft_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_ring_lft_1/jt_ring_lft_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_ring_lft_1/jt_ring_lft_2/jt_ring_lft_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_ring_lft_1/jt_ring_lft_2/jt_ring_lft_3/jt_ring_lft_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_thumb_lft_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_thumb_lft_1/jt_thumb_lft_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_thumb_lft_1/jt_thumb_lft_2/jt_thumb_lft_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_lft/jt_elbow_lft/jt_wrist_lft/jt_thumb_lft_1/jt_thumb_lft_2/jt_thumb_lft_3/jt_thumb_lft_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/hand_attrbts_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_index_rt_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_index_rt_1/jt_index_rt_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_index_rt_1/jt_index_rt_2/jt_index_rt_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_index_rt_1/jt_index_rt_2/jt_index_rt_3/jt_index_rt_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_middle_rt_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_middle_rt_1/jt_middle_rt_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_middle_rt_1/jt_middle_rt_2/jt_middle_rt_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_middle_rt_1/jt_middle_rt_2/jt_middle_rt_3/jt_middle_rt_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_pinky_rt_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_pinky_rt_1/jt_pinky_rt_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_pinky_rt_1/jt_pinky_rt_2/jt_pinky_rt_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_pinky_rt_1/jt_pinky_rt_2/jt_pinky_rt_3/jt_pinky_rt_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_ring_rt_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_ring_rt_1/jt_ring_rt_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_ring_rt_1/jt_ring_rt_2/jt_ring_rt_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_ring_rt_1/jt_ring_rt_2/jt_ring_rt_3/jt_ring_rt_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_thumb_rt_1
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_thumb_rt_1/jt_thumb_rt_2
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_thumb_rt_1/jt_thumb_rt_2/jt_thumb_rt_3
+        weight: 1
+      - path: ctrl_global/jt_root/jt_spine_mid/jt_chest/jt_shoulder_rt/jt_elbow_rt/jt_wrist_rt/jt_thumb_rt_1/jt_thumb_rt_2/jt_thumb_rt_3/jt_thumb_rt_4
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_lft/jt_sheen_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_lft/jt_sheen_lft/jt_ankle_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_lft/jt_sheen_lft/jt_ankle_lft/ctrl_xtra_leg_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_lft/jt_sheen_lft/jt_ankle_lft/jt_ball_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_lft/jt_sheen_lft/jt_ankle_lft/jt_ball_lft/jt_toe_tip_lft
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_rt/jt_sheen_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_rt/jt_sheen_rt/jt_ankle_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_rt/jt_sheen_rt/jt_ankle_rt/ctrl_xtra_leg_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_rt/jt_sheen_rt/jt_ankle_rt/jt_ball_rt
+        weight: 1
+      - path: ctrl_global/jt_root/jt_thigh_rt/jt_sheen_rt/jt_ankle_rt/jt_ball_rt/jt_toe_tip_rt
+        weight: 1
+      - path: ROBO_GEO
+        weight: 1
+      - path: ROBO_GEO/Chest
+        weight: 1
+      - path: ROBO_GEO/eye_lft
+        weight: 1
+      - path: ROBO_GEO/eye_lft/eye_base_lft
+        weight: 1
+      - path: ROBO_GEO/eye_lft/eye_cover_lft
+        weight: 1
+      - path: ROBO_GEO/eye_lft/eye_lense_lft
+        weight: 1
+      - path: ROBO_GEO/eye_rt
+        weight: 1
+      - path: ROBO_GEO/eye_rt/eye_base_rt
+        weight: 1
+      - path: ROBO_GEO/eye_rt/eye_cover_rt
+        weight: 1
+      - path: ROBO_GEO/eye_rt/eye_lense_rt
+        weight: 1
+      - path: ROBO_GEO/Hand_left
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_1a_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_1b_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_1c_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_2a_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_2b_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_2c_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_3a_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_3b_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_3c_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_4a_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_4b_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Fing_4c_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/Lhand_Hero1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/T1_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/T2_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_left/T3_L1
+        weight: 1
+      - path: ROBO_GEO/Hand_right
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_1a_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_1b_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_1c_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_2a_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_2b_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_2c_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_3a_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_3b_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_3c_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_4a_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_4b_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Fing_4c_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/Lhand_Hero1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/T1_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/T2_L1 1
+        weight: 1
+      - path: ROBO_GEO/Hand_right/T3_L1 1
+        weight: 1
+      - path: ROBO_GEO/Head
+        weight: 1
+      - path: ROBO_GEO/Hips
+        weight: 1
+      - path: ROBO_GEO/Ldelt
+        weight: 1
+      - path: ROBO_GEO/Leg_left
+        weight: 1
+      - path: ROBO_GEO/Leg_left/Lfoot
+        weight: 1
+      - path: ROBO_GEO/Leg_left/Lknee
+        weight: 1
+      - path: ROBO_GEO/Leg_left/LlLeg
+        weight: 1
+      - path: ROBO_GEO/Leg_left/Ltoes
+        weight: 1
+      - path: ROBO_GEO/Leg_left/LuLeg
+        weight: 1
+      - path: ROBO_GEO/Leg_right
+        weight: 1
+      - path: ROBO_GEO/Leg_right/Lfoot 1
+        weight: 1
+      - path: ROBO_GEO/Leg_right/Lknee 1
+        weight: 1
+      - path: ROBO_GEO/Leg_right/LlLeg 1
+        weight: 1
+      - path: ROBO_GEO/Leg_right/Ltoes 1
+        weight: 1
+      - path: ROBO_GEO/Leg_right/LuLeg 1
+        weight: 1
+      - path: ROBO_GEO/Lelbow
+        weight: 1
+      - path: ROBO_GEO/LlArm
+        weight: 1
+      - path: ROBO_GEO/LuArm
+        weight: 1
+      - path: ROBO_GEO/Neck
+        weight: 1
+      - path: ROBO_GEO/Rdelt
+        weight: 1
+      - path: ROBO_GEO/Relbow
+        weight: 1
+      - path: ROBO_GEO/Ribs
+        weight: 1
+      - path: ROBO_GEO/RlArm
+        weight: 1
+      - path: ROBO_GEO/RuArm
+        weight: 1
+      - path: ROBO_GEO/Waist
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

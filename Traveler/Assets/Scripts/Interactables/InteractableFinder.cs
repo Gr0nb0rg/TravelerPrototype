@@ -100,12 +100,15 @@ public class InteractableFinder : MonoBehaviour {
     void FindActiveInteractables()
     {
         m_activeInteractables = GameObject.FindObjectsOfType<Interactable>();
-        for (int i = 0; i < m_activeInteractables.Length; i++)
+        if(m_activeInteractables.Length > 0)
         {
-            m_interactableRend.Add(m_activeInteractables[i].gameObject.GetComponentInChildren<MeshRenderer>());
+            for (int i = 0; i < m_activeInteractables.Length; i++)
+            {
+                m_interactableRend.Add(m_activeInteractables[i].gameObject.GetComponentInChildren<MeshRenderer>());
+            }
+            InteractableTarget[] firstTargets = m_activeInteractables[0].GetTargets();
+            m_closestTarget = firstTargets[0];
         }
-        InteractableTarget[] firstTargets = m_activeInteractables[0].GetTargets();
-        m_closestTarget = firstTargets[0];
     }
 
     void ClearActiveInteractables()

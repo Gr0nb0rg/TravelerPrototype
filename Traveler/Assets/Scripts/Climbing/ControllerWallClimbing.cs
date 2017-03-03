@@ -5,8 +5,8 @@ using UnityEngine;
 /*
     Author: Ludvig Grönborg
     Email: ludviggronborg@hotmail.com
-    Phone: 0730654281
-    Last Edited: 2017/02/21
+    Phone: 0730654281 
+    Last Edited: 2017/03/02
 */
 
 /*
@@ -69,7 +69,7 @@ public class ControllerWallClimbing : MonoBehaviour {
     void UpdateMovement()
     {
         // Create movement direction based on player input
-        Vector3 positionChange = new Vector3(0, 0, 0);
+        Vector3 positionChange = Vector3.zero;
         if (Input.GetKey(KeyCode.W))
         {
             if (DirectionAvailable(Direction.UP))
@@ -140,7 +140,7 @@ public class ControllerWallClimbing : MonoBehaviour {
                 // Check for obstacles above player
                 if(m_showFindingRays)
                     Debug.DrawLine(originT, endpointTop, Color.red);
-                if (!Physics.Linecast(originT, endpointTop))
+                if (!Physics.Linecast(originT, endpointTop, m_climbWallMask ^ int.MaxValue))
                 {
                     // Check for climb wall
                     if (m_showFindingRays)

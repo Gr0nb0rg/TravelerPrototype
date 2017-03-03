@@ -82,16 +82,6 @@ public class ClimbTarget : MonoBehaviour {
 
         m_root.localPosition = m_prefabToSample.transform.FindChild("root").localPosition;
         m_root.localRotation = m_prefabToSample.transform.FindChild("root").localRotation;
-        //m_leftHandTarget = m_prefabToSample.transform.Find("leftHand");
-        //m_rightFootTarget = m_prefabToSample.transform.Find("rightFoot");
-        //m_leftFootTarget = m_prefabToSample.transform.Find("leftFoot");
-
-        //m_rightArmHint = m_prefabToSample.transform.Find("rightArmHint");
-        //m_leftArmHint = m_prefabToSample.transform.Find("leftArmHint");
-        //m_rightLegHint = m_prefabToSample.transform.Find("rightLegHint");
-        //m_leftLegHint = m_prefabToSample.transform.Find("leftLegHint");
-
-        //m_root = m_prefabToSample.transform.Find("root").transform; ;
     }
 
     private void AssignCustomPositions()
