@@ -130,86 +130,67 @@ public class ControllerWallClimbing : MonoBehaviour {
     bool DirectionAvailable(Direction dir)
     {
         bool retVal = false;
+        Vector3 sideOffset = transform.right * m_playerWidth * 0.5f;
+        Vector3 forwardOffset = transform.forward.normalized * m_distFromWall;
+
+        Vector3 originT = (transform.up.normalized * (m_playerHeight * 0.35f)) + transform.position;
+        Vector3 originB = (-transform.up.normalized * (m_playerHeight * 0.5f)) + transform.position;
+        Vector3 offsetLR = transform.up.normalized * 0.05f;
+        Vector3 offsetUD = transform.right.normalized * 0.05f;
+
         switch (dir)
         {
             case Direction.UP:
-                Vector3 originT = (transform.up.normalized * (m_playerHeight / 2)) + transform.position;
-                Vector3 endpointTop = (transform.up.normalized * m_wallEdgeLimit) + originT;
-                Vector3 endpointForwardT = (transform.forward.normalized * m_distFromWall) + endpointTop;
-
                 // Check for obstacles above player
-                if(m_showFindingRays)
-                    Debug.DrawLine(originT, endpointTop, Color.red);
-                if (!Physics.Linecast(originT, endpointTop, m_climbWallMask ^ int.MaxValue))
+                if (m_showFindingRays) {
+                    Debug.DrawLine(originT + sideOffset - offsetUD, originT + sideOffset + forwardOffset - offsetUD, Color.red);
+                    Debug.DrawLine(originT - sideOffset + offsetUD, originT - sideOffset + forwardOffset + offsetUD, Color.red);
+                }
+                    
+                if ( Physics.Linecast(originT + sideOffset - offsetUD, originT + sideOffset + forwardOffset - offsetUD, m_climbWallMask)
+                &&   Physics.Linecast(originT - sideOffset + offsetUD, originT - sideOffset + forwardOffset + offsetUD, m_climbWallMask))
                 {
-                    // Check for climb wall
-                    if (m_showFindingRays)
-                        Debug.DrawLine(endpointTop, endpointForwardT, Color.red);
-                    if (Physics.Linecast(endpointTop, endpointForwardT, m_climbWallMask))
-                    {
-                        // Hit a climb wall
-                        retVal = true;
-                    }
+                    retVal = true;
                 }
                 break;
             case Direction.DOWN:
-                Vector3 originB = (-transform.up.normalized * (m_playerHeight / 2)) + transform.position;
-                Vector3 endpointBottom = (-transform.up.normalized * m_wallEdgeLimit) + originB;
-                Vector3 endpointForwardB = (transform.forward.normalized * m_distFromWall) + endpointBottom;
-
-                // Check for obstacles below player
+                // Check for obstacles above player
                 if (m_showFindingRays)
-                    Debug.DrawLine(originB, endpointBottom, Color.red);
-                if (!Physics.Linecast(originB, endpointBottom))
                 {
-                    // Check for climb wall
-                    if(m_showFindingRays)
-                        Debug.DrawLine(endpointBottom, endpointForwardB, Color.red);
-                    if (Physics.Linecast(endpointBottom, endpointForwardB, m_climbWallMask))
-                    {
-                        // Hit a climb wall
-                        retVal = true;
-                    }
+                    Debug.DrawLine(originB + sideOffset - offsetUD, originB + sideOffset + forwardOffset - offsetUD, Color.red);
+                    Debug.DrawLine(originB - sideOffset + offsetUD, originB - sideOffset + forwardOffset + offsetUD, Color.red);
+                }
+
+                if (Physics.Linecast(originB + sideOffset - offsetUD, originB + sideOffset + forwardOffset - offsetUD, m_climbWallMask)
+                && Physics.Linecast(originB - sideOffset + offsetUD, originB - sideOffset + forwardOffset + offsetUD, m_climbWallMask))
+                {
+                    retVal = true;
                 }
                 break;
             case Direction.LEFT:
-                Vector3 originL = (Vector3.Cross(transform.forward, transform.up).normalized * (m_playerWidth / 2)) + transform.position;
-                Vector3 endpointLeft = (Vector3.Cross(transform.forward, transform.up).normalized * m_wallEdgeLimit) + originL;
-                Vector3 endpointForwardL = (transform.forward.normalized * m_distFromWall) + endpointLeft;
-
-                // Check for obstacles adjacent to player
                 if (m_showFindingRays)
-                    Debug.DrawLine(originL, endpointLeft, Color.red);
-                if (!Physics.Linecast(originL, endpointLeft))
                 {
-                    // Check for climb wall
-                    if (m_showFindingRays)
-                        Debug.DrawLine(endpointLeft, endpointForwardL, Color.red);
-                    if (Physics.Linecast(endpointLeft, endpointForwardL, m_climbWallMask))
-                    {
-                        // Hit a climb wall
-                        retVal = true;
-                    }
+                    Debug.DrawLine(originT - sideOffset - offsetLR, originT - sideOffset + forwardOffset - offsetLR, Color.red);
+                    Debug.DrawLine(originB - sideOffset + offsetLR, originB - sideOffset + forwardOffset + offsetLR, Color.red);
+                }
+
+                if (Physics.Linecast(originT - sideOffset - offsetLR, originT - sideOffset + forwardOffset - offsetLR, m_climbWallMask)
+                && Physics.Linecast(originB - sideOffset + offsetLR, originB - sideOffset + forwardOffset + offsetLR, m_climbWallMask))
+                {
+                    retVal = true;
                 }
                 break;
             case Direction.RIGHT:
-                Vector3 originR = (Vector3.Cross(transform.forward, transform.up).normalized * -(m_playerWidth / 2)) + transform.position;
-                Vector3 endpointRight = (Vector3.Cross(transform.forward, transform.up).normalized * -m_wallEdgeLimit) + originR;
-                Vector3 endpointForwardR = (transform.forward.normalized * m_distFromWall) + endpointRight;
-
-                // Check for obstacles adjacent to player
                 if (m_showFindingRays)
-                    Debug.DrawLine(originR, endpointRight, Color.red);
-                if (!Physics.Linecast(originR, endpointRight))
                 {
-                    // Check for climb wall
-                    if (m_showFindingRays)
-                        Debug.DrawLine(endpointRight, endpointForwardR, Color.red);
-                    if (Physics.Linecast(endpointRight, endpointForwardR, m_climbWallMask))
-                    {
-                        // Hit a climb wall
-                        retVal = true;
-                    }
+                    Debug.DrawLine(originT + sideOffset - offsetLR, originT + sideOffset + forwardOffset - offsetLR, Color.red);
+                    Debug.DrawLine(originB + sideOffset + offsetLR, originB + sideOffset + forwardOffset + offsetLR, Color.red);
+                }
+
+                if (Physics.Linecast(originT + sideOffset - offsetLR, originT + sideOffset + forwardOffset - offsetLR, m_climbWallMask)
+                && Physics.Linecast(originB + sideOffset + offsetLR, originB + sideOffset + forwardOffset + offsetLR, m_climbWallMask))
+                {
+                    retVal = true;
                 }
                 break;
             default:

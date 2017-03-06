@@ -60,7 +60,7 @@ public class ControllerClimbing : MonoBehaviour {
                     //CheckForLedgesFromWall();
                     break;
                 case ClimbingState.ReleasedLedge:
-                    //CheckForClimbWalls();
+                    CheckForClimbWalls();
                     break;
                 default:
                     break;
@@ -70,18 +70,36 @@ public class ControllerClimbing : MonoBehaviour {
 
     public void CheckForLedgesFromWall() {
         // Shoot a ray up from above head
-        Debug.DrawLine(transform.position + new Vector3(0, m_Collider.bounds.size.y * 0.5f, 0), transform.position + new Vector3(0, m_Collider.bounds.size.y * 0.51f, 0), Color.blue);
-        RaycastHit hitUP;
-            if (Physics.Linecast(transform.position + new Vector3(0, m_Collider.bounds.size.y * 0.5f, 0), transform.position + new Vector3(0, m_Collider.bounds.size.y * 0.75f, 0), out hitUP, m_climbCheckLayers))
+        if (Input.GetKey(KeyCode.W)) {
+            Vector3 origin = transform.position + transform.forward * 0.2f;
+            Debug.DrawLine(origin, origin + new Vector3(0, m_Collider.bounds.size.y * 0.5f, 0), Color.blue);
+            RaycastHit hitUP;
+            if (Physics.Linecast(origin, origin + new Vector3(0, m_Collider.bounds.size.y * 0.5f, 0), out hitUP, m_climbCheckLayers))
             {
                 if (hitUP.collider.gameObject.tag.Equals("ClimbLedge"))
                 {
-                    if (m_controllerPlayer.GetState().Equals(ClimbingState.WallClimbing))
+                    if(Vector3.Angle(hitUP.transform.forward, transform.forward) < 10)
                     {
                         SwitchToLedgeClimb(hitUP.collider.gameObject.GetComponent<LedgeEdge>().GetClosestTarget(transform.position));
                     }
                 }
             }
+        }
+        if (Input.GetKey(KeyCode.D)) {
+            Vector3 origin = transform.position + (transform.forward * 0.2f) + new Vector3(0,m_Collider.bounds.size.y * 0.35f,0);
+            Debug.DrawLine(origin, origin + new Vector3(m_Collider.bounds.size.x * 0.8f, 0, 0), Color.blue);
+            RaycastHit hitR;
+            if (Physics.Linecast(origin, origin + new Vector3(m_Collider.bounds.size.x * 0.8f, 0, 0), out hitR, m_climbCheckLayers))
+            {
+                if (hitR.collider.gameObject.tag.Equals("ClimbLedge"))
+                {
+                    if (Vector3.Angle(hitR.transform.forward, transform.forward) > 45)
+                    {
+                        SwitchToLedgeClimb(hitR.collider.gameObject.GetComponent<LedgeEdge>().GetClosestTarget(transform.position));
+                    }
+                }
+            }
+        }
     }
 
     public void CheckForLedges()
@@ -122,7 +140,6 @@ public class ControllerClimbing : MonoBehaviour {
         Vector3 endpointL = ((transform.forward.normalized * m_climbCheckRayDist) + m_climbRaycheckL.position);
         Debug.DrawLine(m_climbRaycheckR.position, endpointR, Color.blue);
         Debug.DrawLine(m_climbRaycheckL.position, endpointL, Color.blue);
-
         // Shoot two rays forward from above head
         RaycastHit hitR;
         RaycastHit hitL;
@@ -139,7 +156,7 @@ public class ControllerClimbing : MonoBehaviour {
                     SwitchToWallClimb(hitL.collider.gameObject.transform);
                 }
                 // Activate
-                else if (m_currentState.Equals(ClimbingState.NotClimbing))
+                else if (m_currentState.Equals(ClimbingState.NotClimbing) || m_currentState.Equals(ClimbingState.ReleasedLedge))
                 {
                     if (Vector3.Distance(hitL.point, m_climbRaycheckL.position) <= m_controllerWallClimbing.DistanceFromWall)
                         ActivateWallClimbing(hitL.collider.gameObject.transform);

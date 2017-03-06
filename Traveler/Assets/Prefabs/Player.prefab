@@ -1216,6 +1216,7 @@ GameObject:
   - component: {fileID: 54061726385600024}
   - component: {fileID: 114603943907655148}
   - component: {fileID: 136856289979724750}
+  - component: {fileID: 114743354137334850}
   - component: {fileID: 114248606343550976}
   - component: {fileID: 114359287983203886}
   - component: {fileID: 114543319584382440}
@@ -5569,7 +5570,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1235170981380462}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.042734, y: 0.84, z: 1.8436314}
+  m_LocalPosition: {x: 0, y: 0.851, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4905947038291152}
@@ -10196,7 +10197,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1972184972981750}
-  m_LocalRotation: {x: 0.043382194, y: -0, z: -0, w: 0.99905854}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10204,7 +10205,7 @@ Transform:
   - {fileID: 4638670077110848}
   m_Father: {fileID: 4016134966828710}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 4.973, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4955324649130134
 Transform:
   m_ObjectHideFlags: 1
@@ -10538,15 +10539,9 @@ MonoBehaviour:
   m_AirMulti: 0.5
   m_AirAcc: 5
   m_JumpForce: 10
-  m_climbCheckRayDist: 0.35
-  m_climbRaycheckR: {fileID: 4905947038291152}
-  m_climbRaycheckL: {fileID: 4459101559581836}
   m_StandableLayers:
     serializedVersion: 2
     m_Bits: 4294964169
-  m_climbCheckLayers:
-    serializedVersion: 2
-    m_Bits: 2305
 --- !u!114 &114248606343550976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10708,6 +10703,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eacce66b63d49849ae0817067f4ae30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114743354137334850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1235170981380462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d33e4d6f2cfea324dbb3ce5148e82071, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_climbCheckRayDist: 0.4
+  m_climbRaycheckR: {fileID: 4905947038291152}
+  m_climbRaycheckL: {fileID: 4459101559581836}
+  m_climbCheckLayers:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!135 &135799321620327856
 SphereCollider:
   m_ObjectHideFlags: 1
