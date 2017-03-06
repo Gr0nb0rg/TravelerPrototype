@@ -25,7 +25,7 @@ public class ControllerUI : MonoBehaviour
     bool m_IsPaused = false;
 
     // EditorSettings
-    bool m_hideCursor = false;
+    bool m_hideCursor = true;
 
     //Component vars
     ControllerPlayer m_Player;

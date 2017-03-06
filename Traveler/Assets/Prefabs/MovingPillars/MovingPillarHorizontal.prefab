@@ -186,7 +186,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1459020319270628}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.98, y: -0.3, z: -9.6}
+  m_LocalPosition: {x: -0, y: 11, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4952949290959922}
@@ -200,7 +200,7 @@ Transform:
   m_GameObject: {fileID: 1491092346193218}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 18.47, z: 2.09}
+  m_LocalScale: {x: 2.1000001, y: 18.47, z: 2.09}
   m_Children:
   - {fileID: 4250964744976774}
   - {fileID: 4239495272518240}
@@ -215,7 +215,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1934527747785906}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.6, y: -20.48, z: -9.25}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4705738054012902}
@@ -241,16 +241,16 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1340528125944152}
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -36.94, y: -6.06, z: 3.4147394}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.70710677, y: 0.7071068, z: 0.00000031909937, w: 0.00000034272668}
+  m_LocalPosition: {x: -105.08, y: 22.88218, z: -64}
+  m_LocalScale: {x: 1, y: 1, z: 1.7556221}
   m_Children:
   - {fileID: 4805954738816168}
   - {fileID: 4695416619155650}
   - {fileID: 4741984535276070}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 180.00002, z: 90.00001}
 --- !u!23 &23003048008166544
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24bc3917fe8aa62418e478df95dc5c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_secondsEnlarged: 1
-  m_extendingSpeed: 5
-  m_retractionSpeed: 5
+  m_secondsEnlarged: 2
+  m_extendingSpeed: 20
+  m_retractionSpeed: 20
   m_alwaysActive: 0
