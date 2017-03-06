@@ -23,7 +23,7 @@ public class ControllerLedgeClimbing : MonoBehaviour
     private float m_transitionDuration = 0.4f;
 
     // Component vars
-    private ControllerPlayer m_playerController;
+    private ControllerClimbing m_controllerClimbing;
     private ClimbingIK m_climbingIK;
     private CapsuleCollider m_collider;
     private ClimbTarget m_currentClimbTarget = null;
@@ -46,7 +46,7 @@ public class ControllerLedgeClimbing : MonoBehaviour
         m_collider = GetComponent<CapsuleCollider>();
         m_playerHeight = m_collider.bounds.size.y;
         m_playerWidth = m_collider.bounds.size.x;
-        m_playerController = GetComponent<ControllerPlayer>();
+        m_controllerClimbing = GetComponent<ControllerClimbing>();
         m_climbingIK = GetComponentInChildren<ClimbingIK>();
         this.enabled = false;
     }
@@ -105,7 +105,8 @@ public class ControllerLedgeClimbing : MonoBehaviour
             m_climbingIK.IK_Active = false;
             // NOTE: Assumes climbTarget roots are only rotated in x
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-            m_playerController.DeactivateLedgeClimbing();
+            m_controllerClimbing.DeactivateLedgeClimbing();
+            print("DURPIT");
         }
 
         // Vault
@@ -198,7 +199,7 @@ public class ControllerLedgeClimbing : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
         transform.position = m_vaultpos;
         m_climbingIK.IK_Active = false;
-        m_playerController.DeactivateLedgeClimbing();
+        m_controllerClimbing.DeactivateLedgeClimbing();
     }
 
     // NOTE: Should stop all interpolations and release player

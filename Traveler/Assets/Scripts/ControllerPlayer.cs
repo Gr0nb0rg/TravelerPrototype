@@ -2,8 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(ControllerWallClimbing))]
-[RequireComponent(typeof(ControllerLedgeClimbing))]
+[RequireComponent(typeof(ControllerClimbing))]
 [RequireComponent(typeof(PlayerCollisions))]
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(ControllerCheckpoint))]
@@ -16,8 +15,7 @@ public class ControllerPlayer : MonoBehaviour
         Jumping,
         Falling,
         Running,
-        LedgeClimbing,
-        WallClimbing,
+        Climbing,
         Sliding
     }
 
@@ -46,17 +44,7 @@ public class ControllerPlayer : MonoBehaviour
     private Rigidbody m_Rigidbody;
     private Collider m_Collider;
     private ControllerCamera m_Camera;
-    private ControllerWallClimbing m_controllerWallClimbing;
-    private ControllerLedgeClimbing m_controllerLedgeClimbing;
-
-    // Climbing vars
-    [SerializeField]
-    private float m_climbCheckRayDist;
-    [SerializeField]
-    private Transform m_climbRaycheckR;
-    [SerializeField]
-    private Transform m_climbRaycheckL;
-    private bool m_releasedClimb = false;
+    private ControllerClimbing m_controllerClimbing;
 
     //Jump vars
     private bool m_IsOnGround = false;
@@ -64,10 +52,10 @@ public class ControllerPlayer : MonoBehaviour
     //Movement vars
     [SerializeField]
     private LayerMask m_StandableLayers;
-    [SerializeField]
-    private LayerMask m_climbCheckLayers;
+
     private RaycastHit m_Hit;
     private Vector3 m_SlopeVelocity;
+
 
     //Paused vars
     private bool m_IsPaused = false;
@@ -77,16 +65,18 @@ public class ControllerPlayer : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Collider = GetComponent<CapsuleCollider>();
         m_Camera = Camera.main.GetComponent<ControllerCamera>();
-        m_controllerWallClimbing = GetComponent<ControllerWallClimbing>();
-        m_controllerLedgeClimbing = GetComponent<ControllerLedgeClimbing>();
+        m_controllerClimbing = GetComponent<ControllerClimbing>();
     }
 
     void Update()
     {
         if (!m_IsPaused)
         {
-            CheckForClimbingAreas();
+            //m_controllerClimbing
+            //CheckForClimbingAreas();
+
             CheckState();
+            m_controllerClimbing.UpdateClimbing();
             HorizontalUpdate();
             JumpUpdate();
         }
@@ -94,7 +84,7 @@ public class ControllerPlayer : MonoBehaviour
 
     void HorizontalUpdate()
     {
-        if (!GetState().Equals(MovementState.WallClimbing) && !GetState().Equals(MovementState.LedgeClimbing))
+        if (!GetState().Equals(MovementState.Climbing))
         {
             //Get forward rotation
             Vector3 forward = Camera.main.transform.forward;
@@ -181,7 +171,7 @@ public class ControllerPlayer : MonoBehaviour
 
     void JumpUpdate()
     {
-        if (m_IsOnGround && Input.GetKeyDown(KeyCode.Space) && (m_State != MovementState.WallClimbing) && (m_State != MovementState.LedgeClimbing))
+        if (m_IsOnGround && Input.GetKeyDown(KeyCode.Space))
         {
             //m_Rigidbody.AddForce(Vector3.up * m_JumpForce, ForceMode.Impulse);
             m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, m_JumpForce, m_Rigidbody.velocity.z);
@@ -190,7 +180,7 @@ public class ControllerPlayer : MonoBehaviour
 
     void CheckState()
     {
-        if (!GetState().Equals(MovementState.WallClimbing) && !GetState().Equals(MovementState.LedgeClimbing))
+        if (!GetState().Equals(MovementState.Climbing))
         {
             //Checks what current movementstate the player should be in
             if (IsOnGround())
@@ -204,7 +194,9 @@ public class ControllerPlayer : MonoBehaviour
                 }
                 else
                     SetState(MovementState.Sliding);
-                m_releasedClimb = false;
+                /*m_findWalls = true;
+                m_findLedges = true;*/
+                m_controllerClimbing.State = ControllerClimbing.ClimbingState.NotClimbing;
                 m_IsOnGround = true;
                 SetGravity(false);
             }
@@ -219,6 +211,18 @@ public class ControllerPlayer : MonoBehaviour
             }
         }
         DrawCast(transform.position, transform.forward, 10);
+    }
+
+    public void ActivateClimbing() {
+        SetKinematic(true);
+        SetGravity(false);
+        SetState(MovementState.Climbing);
+    }
+
+    public void DeactivateClimbing() {
+        SetKinematic(false);
+        SetGravity(true);
+        SetState(MovementState.Falling);
     }
 
     bool IsOnGround()
@@ -261,7 +265,6 @@ public class ControllerPlayer : MonoBehaviour
                 return true;
             }
         }
-
         return false;
     }
 
@@ -278,125 +281,8 @@ public class ControllerPlayer : MonoBehaviour
             if (a >= angle)
                 return true;
         }
-
         return false;
     }
-
-    public void CheckForClimbingAreas()
-    {
-        if ((GetState().Equals(MovementState.Jumping) || GetState().Equals(MovementState.Falling) || GetState().Equals(MovementState.WallClimbing) || GetState().Equals(MovementState.LedgeClimbing)) && !m_releasedClimb)
-        {
-            Vector3 endpointR = ((transform.forward.normalized * m_climbCheckRayDist) + m_climbRaycheckR.position);
-            Vector3 endpointL = ((transform.forward.normalized * m_climbCheckRayDist) + m_climbRaycheckL.position);
-            Debug.DrawLine(m_climbRaycheckR.position, endpointR, Color.blue);
-            Debug.DrawLine(m_climbRaycheckL.position, endpointL, Color.blue);
-
-            // Shoot two rays from above head
-            RaycastHit hitR;
-            RaycastHit hitL;
-            if (
-                Physics.Linecast(m_climbRaycheckR.position, endpointR, out hitR, m_climbCheckLayers)
-                &&
-                Physics.Linecast(m_climbRaycheckL.position, endpointL, out hitL, m_climbCheckLayers))
-            {
-                // Did both hit ledge trigger?
-                if (hitL.collider.gameObject.tag.Equals("ClimbLedge") && hitR.collider.gameObject.tag.Equals("ClimbLedge"))
-                {
-                    // Switch to
-                    if (GetState().Equals(MovementState.WallClimbing))
-                    {
-                        SwitchToLedgeClimb(hitR.collider.gameObject.GetComponent<LedgeEdge>().GetClosestTarget(transform.position));
-                    }
-                    // Activate
-                    else if (!GetState().Equals(MovementState.LedgeClimbing))
-                    {
-                        // Start climbing at climb target closest to a point between raycasts
-                        ActivateLedgeClimbing(hitR.collider.gameObject.GetComponent<LedgeEdge>().GetClosestTarget(transform.position));
-                    }
-                }
-                // Did both hit wall trigger?
-                else if (hitL.collider.gameObject.tag.Equals("ClimbWall") && hitR.collider.gameObject.tag.Equals("ClimbWall"))
-                {
-                    // Switch to
-                    if (GetState().Equals(MovementState.LedgeClimbing))
-                    {
-                        SwitchToWallClimb(hitL.collider.gameObject.transform);
-                    }
-                    // Activate
-                    else if (!GetState().Equals(MovementState.WallClimbing))
-                    {
-                        if (Vector3.Distance(hitL.point, m_climbRaycheckL.position) <= m_controllerWallClimbing.DistanceFromWall)
-                            ActivateWallClimbing(hitL.collider.gameObject.transform);
-                    }
-                }
-            }
-        }
-    }
-
-    // Go into wall climbing mode
-    public void ActivateWallClimbing(Transform wall)
-    {
-        //transform.parent = wall;
-        SetState(MovementState.WallClimbing);
-        m_controllerWallClimbing.enabled = true;
-        m_controllerWallClimbing.InitiateClimb(wall.rotation);
-        SetKinematic(true);
-        SetGravity(false);
-    }
-
-    // Go out of wall climbing mode
-    public void DeactivateWallClimbing()
-    {
-        //transform.parent = null;
-        SetState(MovementState.Falling);
-        m_controllerWallClimbing.enabled = false;
-        m_releasedClimb = true;
-        SetKinematic(false);
-        SetGravity(true);
-    }
-
-    // Go from ledgeclimbing to wall climbing
-    private void SwitchToWallClimb(Transform wall)
-    {
-        transform.parent = null;
-        SetState(MovementState.WallClimbing);
-        m_controllerLedgeClimbing.enabled = false;
-        m_controllerWallClimbing.enabled = true;
-        m_controllerWallClimbing.InitiateClimb(wall.rotation);
-    }
-
-    // Go into ledge climbing mode
-    public void ActivateLedgeClimbing(ClimbTarget initialTarget)
-    {
-        SetState(MovementState.LedgeClimbing);
-        transform.parent = initialTarget.transform;
-        m_controllerLedgeClimbing.enabled = true;
-        m_controllerLedgeClimbing.InitiateClimb(initialTarget);
-        SetKinematic(true);
-        SetGravity(false);
-    }
-
-    // Go out of ledge climbing mode
-    public void DeactivateLedgeClimbing()
-    {
-        transform.parent = null;
-        SetState(MovementState.Falling);
-        m_controllerLedgeClimbing.enabled = false;
-        m_releasedClimb = true;
-        SetKinematic(false);
-        SetGravity(true);
-    }
-
-    // Go from wall climbing to ledge climbing
-    private void SwitchToLedgeClimb(ClimbTarget initialTarget)
-    {
-        SetState(MovementState.LedgeClimbing);
-        m_controllerWallClimbing.enabled = false;
-        m_controllerLedgeClimbing.enabled = true;
-        m_controllerLedgeClimbing.InitiateClimb(initialTarget);
-    }
-
-
 
     //Collection of raycast-functions that also draw the ray
     bool DrawCast(Vector3 position, Vector3 direction, float distance, int layermask)

@@ -37,7 +37,7 @@ public class ControllerWallClimbing : MonoBehaviour {
     private LayerMask m_climbWallMask;
 
     // Component variables
-    private ControllerPlayer m_playerController;
+    private ControllerClimbing m_controllerClimbing;
     //private CapsuleCollider m_playerCollider;
 
     // Reference values
@@ -50,7 +50,7 @@ public class ControllerWallClimbing : MonoBehaviour {
 
     void Start()
     {
-        m_playerController = GetComponent<ControllerPlayer>();
+        m_controllerClimbing = GetComponent<ControllerClimbing>();
         CapsuleCollider playerCollider = GetComponent<CapsuleCollider>();
         m_playerWidth = playerCollider.bounds.size.x;
         m_playerHeight = playerCollider.bounds.size.y;
@@ -123,7 +123,7 @@ public class ControllerWallClimbing : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Space))
         {
-            m_playerController.DeactivateWallClimbing();
+            m_controllerClimbing.DeactivateWallClimbing();
         }
     }
 
