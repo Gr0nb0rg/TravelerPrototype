@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+
 public class PillarDistance : AbstractInteractable
 {
 
     public List<Transform> m_transforms;
+    public List<float> m_times;
 
-    private List<Vector3> m_targets;
+    private List<PillarTarget> m_targets;
     private Transform startPosition;
-  
+
     public bool rotateToTarget;
     public bool reverse;
     public bool usePhysics;
@@ -20,6 +22,8 @@ public class PillarDistance : AbstractInteractable
 
     public float initalSpeed;
     public float minSpeed;
+
+    
 
     private bool goingBack = false;
     private bool m_pillarInMotion = false;
@@ -31,27 +35,46 @@ public class PillarDistance : AbstractInteractable
     private Rigidbody m_rigidbody;
 
     private float m_distance = 0f;
+    private float m_time = 0;
 
     private Vector3 m_direction;
 
     private int currentNum = 1;
 
-    void Start (){
-        m_targets = new List<Vector3>();
-
-        foreach (Transform t in m_transforms)
+    void Start()
+    {
+        m_targets = new List<PillarTarget>();
+        try
         {
-            m_targets.Add(t.position);
+            m_time = m_times[0];
+        }
+        catch (Exception)
+        {
+            m_time = 0;   
+            Debug.Log("ADD TIME");
+        }
+        for (int i = 0; i < m_transforms.Count; i++)
+        {
+            try
+            {
+                m_targets.Add(new PillarTarget(m_transforms[i].position, m_times[i]));
+            }
+            catch (Exception e)
+            {
+                m_targets.Add(new PillarTarget(m_transforms[i].position, 0));
+                Debug.Log("Exception in adding pillartargets: " + e);
+            }
+            
         }
 
         m_rigidbody = GetComponent<Rigidbody>();
 
         if (rotateToTarget)
         {
-            transform.LookAt(m_targets[currentNum]);
+            transform.LookAt(m_targets[currentNum].m_position);
         }
-        m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
-        m_direction = m_targets[currentNum] - transform.position;
+        m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
+        m_direction = m_targets[currentNum].m_position - transform.position;
 
     }
 
@@ -66,9 +89,17 @@ public class PillarDistance : AbstractInteractable
 
         if (!active) return;
 
+        if (m_time > 0)
+        {
+            m_time -= Time.deltaTime;
+            return;
+        }
+
         if (CheckDistance())
         {
             EditTarget();
+            if(m_time > 0)
+                return;
         }
         if (!active) return;
 
@@ -80,14 +111,14 @@ public class PillarDistance : AbstractInteractable
         if (m_targets.Count > 1 && currentNum < m_targets.Count && !goingBack)
         {
             currentNum++;
-
+            m_time = m_targets[currentNum - 1].m_time;
             if (currentNum < m_targets.Count)
-            {
+            {  
                 if (rotateToTarget)
-                    transform.LookAt(m_targets[currentNum]);
+                    transform.LookAt(m_targets[currentNum].m_position);
 
-                m_direction = m_targets[currentNum] - transform.position;
-                m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+                m_direction = m_targets[currentNum].m_position - transform.position;
+                m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
             }
         }
         else if (reverse)
@@ -95,6 +126,7 @@ public class PillarDistance : AbstractInteractable
             currentNum--;
             if (currentNum == -1 && !alwaysActive)
             {
+                m_time = m_targets[currentNum + 1].m_time;
                 active = false;
                 m_rigidbody.velocity = Vector3.zero;
                 m_distance = 0;
@@ -110,8 +142,10 @@ public class PillarDistance : AbstractInteractable
                 m_rigidbody.isKinematic = true;
                 goingBack = false;
             }
-            m_direction = m_targets[currentNum] - transform.position;
-            m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+
+            m_time = m_targets[currentNum + 1].m_time;
+            m_direction = m_targets[currentNum].m_position - transform.position;
+            m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
 
         }
 
@@ -131,10 +165,10 @@ public class PillarDistance : AbstractInteractable
             goingBack = true;
 
             if (rotateToTarget)
-                transform.LookAt(m_targets[currentNum]);
+                transform.LookAt(m_targets[currentNum].m_position);
 
-            m_direction = m_targets[currentNum] - transform.position;
-            m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+            m_direction = m_targets[currentNum].m_position - transform.position;
+            m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
         }   
     }
 
@@ -147,7 +181,7 @@ public class PillarDistance : AbstractInteractable
             return true;
         }
 
-        m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+        m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
 
         if (inRange && m_distance > 0.4f)
         {
@@ -158,6 +192,8 @@ public class PillarDistance : AbstractInteractable
 
     public override void Interact(){
 
+        Debug.Log("Activate!");
+
         if (active || end) return;
 
         if (useOnce && hasActivated)
@@ -165,8 +201,8 @@ public class PillarDistance : AbstractInteractable
 
         hasActivated = true;
         active = true;
-        m_direction = m_targets[currentNum] - transform.position;
-        m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+        m_direction = m_targets[currentNum].m_position - transform.position;
+        m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
         if (usePhysics)
             m_rigidbody.isKinematic = false;
     }
