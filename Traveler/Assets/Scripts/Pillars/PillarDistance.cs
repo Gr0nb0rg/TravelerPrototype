@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 public class PillarDistance : AbstractInteractable
@@ -10,8 +8,7 @@ public class PillarDistance : AbstractInteractable
     public List<Transform> m_transforms;
     public List<float> m_times;
 
-    private List<PillarTarget> m_targets;
-    private Transform startPosition;
+    public List<AbstractInteractable> signalList;
 
     public bool rotateToTarget;
     public bool reverse;
@@ -19,14 +16,15 @@ public class PillarDistance : AbstractInteractable
     public bool useMinSpeed;
     public bool alwaysActive;
     public bool useOnce;
+    public bool constantSpeed;
 
     public float initalSpeed;
     public float minSpeed;
 
-    
+    private List<PillarTarget> m_targets;
+    private Transform startPosition;
 
     private bool goingBack = false;
-    private bool m_pillarInMotion = false;
     private bool active = false;
     private bool inRange = false;
     private bool hasActivated = false;
@@ -124,25 +122,22 @@ public class PillarDistance : AbstractInteractable
         else if (reverse)
         {
             currentNum--;
-            if (currentNum == -1 && !alwaysActive)
+            if(currentNum < 0)
             {
+                active = false;
+                currentNum = 1;
+                m_rigidbody.isKinematic = true;
+                goingBack = false;
                 m_time = m_targets[currentNum + 1].m_time;
-                active = false;
-                m_rigidbody.velocity = Vector3.zero;
-                m_distance = 0;
-                currentNum = 1;
-                m_rigidbody.isKinematic = true;
-                goingBack = false;
-                return;
-            }
-            else if(currentNum == -1)
-            {
-                active = false;
-                currentNum = 1;
-                m_rigidbody.isKinematic = true;
-                goingBack = false;
-            }
 
+                if (!alwaysActive)
+                {
+                    m_rigidbody.velocity = Vector3.zero;
+                    m_distance = 0;
+                    return;
+                }
+            }
+                
             m_time = m_targets[currentNum + 1].m_time;
             m_direction = m_targets[currentNum].m_position - transform.position;
             m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
@@ -191,13 +186,15 @@ public class PillarDistance : AbstractInteractable
     }
 
     public override void Interact(){
-
-        Debug.Log("Activate!");
-
         if (active || end) return;
 
         if (useOnce && hasActivated)
             return;
+
+        for (int i = 0; i < signalList.Count; i++)
+        {
+            signalList[i].GetComponent<AbstractInteractable>().Signal();
+        }
 
         hasActivated = true;
         active = true;
@@ -207,10 +204,21 @@ public class PillarDistance : AbstractInteractable
             m_rigidbody.isKinematic = false;
     }
 
-    private void VelocityUpdate(){
-       
+    public override void Signal()
+    {
+        active = !active;
+    }
 
-        var speed = (initalSpeed*m_distance)/25;
+    private void VelocityUpdate(){
+
+        float speed;
+        if (constantSpeed)
+            speed = initalSpeed / 25;
+        else
+            speed = (initalSpeed * m_distance) / 25;
+
+        if (speed < minSpeed / 25 && useMinSpeed && m_distance != 0 && !constantSpeed)
+            speed = minSpeed / 25;
 
         if (speed < minSpeed/25 && useMinSpeed && m_distance != 0)
             speed = minSpeed/25;
@@ -247,4 +255,6 @@ public class PillarDistance : AbstractInteractable
         Gizmos.DrawCube(m_transforms[m_transforms.Count - 1].position, new Vector3(1, 1, 1));
 
     }
+
+    
 }

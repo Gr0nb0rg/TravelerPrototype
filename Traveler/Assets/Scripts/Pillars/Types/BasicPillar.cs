@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -96,6 +97,11 @@ public class BasicPillar : AbstractInteractable {
         if(m_alwaysActive)
             StartCoroutine(ConstantExtension());
         m_pillarInMotion = false;
+    }
+
+    public override void Signal()
+    {
+        throw new NotImplementedException();
     }
 }
 

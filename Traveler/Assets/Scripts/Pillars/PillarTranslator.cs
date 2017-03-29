@@ -145,6 +145,11 @@ public class PillarTranslator : AbstractInteractable
         }
     }
 
+    public override void Signal()
+    {
+        throw new NotImplementedException();
+    }
+
     //// Constant Translation
     //IEnumerator ConstantExtension()
     //{
@@ -229,7 +234,7 @@ public class PillarTranslator : AbstractInteractable
 
     //        if (targetPos > y)
     //            break;
- 
+
     //        m_currentTran.localPosition = new Vector3(
     //                                  m_currentTran.localPosition.x,
     //                                  y,

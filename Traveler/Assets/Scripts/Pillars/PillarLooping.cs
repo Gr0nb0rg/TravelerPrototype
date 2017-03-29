@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PillarLooping : AbstractInteractable
 {
     public List<Transform> m_transforms;
+    public List<float> m_times;
 
-    private List<Vector3> m_targets;
-    private Transform startPosition;
+    public List<AbstractInteractable> signalList;
 
     public bool rotateToTarget;
     public bool useMinSpeed;
@@ -23,8 +24,12 @@ public class PillarLooping : AbstractInteractable
     private bool active = false;
     private bool reachedEnd = false;
 
+    private List<PillarTarget> m_targets;
+    private Transform startPosition;
+
     private Rigidbody m_rigidbody;
 
+    private float m_time;
     private float m_distance = 0f;
 
     private Vector3 m_direction;
@@ -35,46 +40,58 @@ public class PillarLooping : AbstractInteractable
         if (alwaysActive)
             active = true;
 
-        m_targets = new List<Vector3>();
+        m_targets = new List<PillarTarget>();
 
-        foreach (Transform t in m_transforms)
+        try
         {
-            m_targets.Add(t.position);
+            m_time = m_times[0];
+        }
+        catch (Exception)
+        {
+            m_time = 0;
+            Debug.Log("ADD TIME");
+        }
+        for (int i = 0; i < m_transforms.Count; i++)
+        {
+            try
+            {
+                m_targets.Add(new PillarTarget(m_transforms[i].position, m_times[i]));
+            }
+            catch (Exception e)
+            {
+                m_targets.Add(new PillarTarget(m_transforms[i].position, 0));
+                Debug.Log("Exception in adding pillartargets: " + e);
+            }
+
         }
 
         m_rigidbody = GetComponent<Rigidbody>();
 
         if (rotateToTarget)
         {
-            transform.LookAt(m_targets[currentNum]);
+            transform.LookAt(m_targets[currentNum].m_position);
         }
-        m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
-        m_direction = m_targets[currentNum] - transform.position;
+        m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
+        m_direction = m_targets[currentNum].m_position - transform.position;
     }
 
     void Update () {
-
-        #if UNITY_EDITOR
-        for (int i = 0; i < m_targets.Count - 1; i++)
-        {
-            if (m_targets[i] == null || m_targets[i + 1] == null)
-            {
-                break;
-            }
-
-
-            Debug.DrawLine(m_targets[i], m_targets[i + 1], Color.red);
-        }
-        #endif
-
         if (!active) return;
 
         if (usePhysics)
             m_rigidbody.isKinematic = false;
 
+        if (m_time > 0)
+        {
+            m_time -= Time.deltaTime;
+            return;
+        }
+
         if (CheckDistance())
         {
             EditTarget();
+            if (m_time > 0)
+                return;
         }
 
         VelocityUpdate();
@@ -87,23 +104,25 @@ public class PillarLooping : AbstractInteractable
             if (stopAtStart)
                 reachedEnd = true;
 
+            m_time = m_targets[0].m_time;
             currentNum = 0;
-            m_direction = m_targets[currentNum] - transform.position;
-            m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+            m_direction = m_targets[currentNum].m_position - transform.position;
+            m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
         }
         else
         {
             currentNum++;
+            m_time = m_targets[currentNum - 1].m_time;
 
-            if (stopAtStart && !alwaysActive && currentNum == 1 && reachedEnd)
+            if (!alwaysActive && currentNum == 1 && reachedEnd)
             {
                 active = false;
                 m_rigidbody.isKinematic = true;
                 return;
             }
 
-            m_direction = m_targets[currentNum] - transform.position;
-            m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+            m_direction = m_targets[currentNum].m_position - transform.position;
+            m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
         }
     }
     private bool CheckDistance()
@@ -115,7 +134,7 @@ public class PillarLooping : AbstractInteractable
             return true;
         }
 
-        m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+        m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
 
         if (inRange && m_distance > 0.4f)
         {
@@ -148,14 +167,23 @@ public class PillarLooping : AbstractInteractable
 
     public override void Interact()
     {
-
         if (active) return;
 
+        for (int i = 0; i < signalList.Count; i++)
+        {
+            signalList[i].GetComponent<AbstractInteractable>().Signal();
+        }
+
         active = true;
-        m_direction = m_targets[currentNum] - transform.position;
-        m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
+        m_direction = m_targets[currentNum].m_position - transform.position;
+        m_distance = Vector3.Distance(transform.position, m_targets[currentNum].m_position);
         if (usePhysics)
             m_rigidbody.isKinematic = false;
+    }
+
+    public override void Signal()
+    {
+        active = !active;
     }
 
     void OnDrawGizmos()
@@ -172,8 +200,10 @@ public class PillarLooping : AbstractInteractable
             Gizmos.DrawCube(m_transforms[i].position, new Vector3(1, 1, 1));
         }
 
-        Gizmos.DrawLine(m_transforms[0].position, m_transforms[m_transforms.Count - 1].position);
-        Gizmos.DrawCube(m_transforms[m_transforms.Count - 1].position, new Vector3(1, 1, 1));
-
+        if (m_transforms.Count > 0)
+        {
+            Gizmos.DrawLine(m_transforms[0].position, m_transforms[m_transforms.Count - 1].position);
+            Gizmos.DrawCube(m_transforms[m_transforms.Count - 1].position, new Vector3(1, 1, 1));
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class PillarPointbyPoint : AbstractInteractable
 {
     public List<Transform> m_transforms;
 
-    private List<Vector3> m_targets;
+    public List<AbstractInteractable> signalList;
 
     public bool rotateToTarget;
     public bool reverse;
@@ -17,7 +18,6 @@ public class PillarPointbyPoint : AbstractInteractable
     public float initalSpeed;
     public float minSpeed;
 
-    private bool m_pillarInMotion = false;
     private bool active = false;
     private bool inRange = false;
     private bool end = false;
@@ -27,6 +27,7 @@ public class PillarPointbyPoint : AbstractInteractable
 
     private float m_distance = 0f;
 
+    private List<Vector3> m_targets;
     private Vector3 m_direction;
 
     private int currentNum = 1;
@@ -141,14 +142,23 @@ public class PillarPointbyPoint : AbstractInteractable
 
     public override void Interact()
     {
-
         if (active || end) return;
+
+        for (int i = 0; i < signalList.Count; i++)
+        {
+            signalList[i].GetComponent<AbstractInteractable>().Signal();
+        }
 
         active = true;
         m_direction = m_targets[currentNum] - transform.position;
         m_distance = Vector3.Distance(transform.position, m_targets[currentNum]);
         if (usePhysics)
             m_rigidbody.isKinematic = false;
+    }
+
+    public override void Signal()
+    {
+        active = !active;
     }
 
     void OnDrawGizmos()

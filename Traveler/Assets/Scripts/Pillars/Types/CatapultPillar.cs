@@ -96,4 +96,9 @@ public class CatapultPillar : AbstractInteractable
             }
         }
     }
+
+    public override void Signal()
+    {
+        throw new NotImplementedException();
+    }
 }

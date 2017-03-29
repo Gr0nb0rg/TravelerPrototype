@@ -4,4 +4,5 @@ using UnityEngine;
 
 abstract public class AbstractInteractable : MonoBehaviour {
     public abstract void Interact();
+    public abstract void Signal();
 }
